@@ -1,0 +1,17 @@
+@charset "UTF-8";
+
+body {
+  background-color: #f0f0f0;
+}
+
+h2 {
+  font-size: x-large;
+}
+
+div, button, input[type=text], textarea {
+  font-size: large;
+}
+
+td {
+  vertical-align: top
+}

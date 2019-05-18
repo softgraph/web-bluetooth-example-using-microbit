@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" type="text/css" href="theme.css">
+<title>
+	Controllrig micro:bit device via Web Bluetooth API
+	</title>
+	</head>
+
+<body>
+<h2>
+	Controllrig micro:bit device via Web Bluetooth API
+	</h2>
+
+<table>
+<tr>
+<td>
+<div>
+	Connection Status:
+	</div>
+	</td>
+
+<td>
+<input id="id_input_text_connection_status" type="text" size="40" readonly>
+	</td>
+	</tr>
+
+<tr>
+<td>
+<div>
+	Button Status:
+	</div>
+	</td>
+
+<td>
+<input id="id_input_text_button_status" type="text" size="40" readonly>
+	</td>
+	</tr>
+
+<tr>
+<td>
+<div>
+	Device Information:
+	</div>
+	</td>
+
+<td>
+<textarea id="id_textarea_device_information" rows="4" cols="40" readonly>
+	</textarea>
+	</td>
+	</tr>
+	</table>
+
+<button type="button" id="id_button_connect">
+	Connect
+	</button>
+
+<button type="button" id="id_button_disconnect">
+	Disconnect
+	</button>
+
+<button type="button" id="id_button_say_hello">
+	Say Hello
+	</button>
+
+<script src="main.js">
+	</script>
+	</body>
+	</html>
