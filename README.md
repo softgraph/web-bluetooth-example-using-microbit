@@ -81,7 +81,7 @@
 
 ### Browser Side
 
-1. Clone [the repositry (github.com/softgraph)](https://github.com/softgraph/web-bluetooth-example-using-microbit).
+1. Clone [web-bluetooth-example-using-microbit](https://github.com/softgraph/web-bluetooth-example-using-microbit) repositry.
 
 ## Operations
 

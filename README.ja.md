@@ -79,7 +79,7 @@
 
 ### ブラウザ側
 
-1. [リポジトリ (github.com/softgraph)](https://github.com/softgraph/web-bluetooth-example-using-microbit) をクローンする。
+1. [web-bluetooth-example-using-microbit](https://github.com/softgraph/web-bluetooth-example-using-microbit) リポジトリをクローンする。
 
 ## 手順
 
