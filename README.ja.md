@@ -79,14 +79,11 @@
 
 ### ブラウザ側
 
-1. 次の 3 ファルをダウンロードする。
-	+ [index.html](ble/index.html) を `index.html` として保存
-	+ [main.js](ble/main.js) を `main.js` として保存
-	+ [theme.css](ble/theme.css) を `theme.css` として保存
+1. [リポジトリ (github.com/softgraph)](https://github.com/softgraph/web-bluetooth-example-using-microbit) をクローンする。
 
 ## 手順
 
-1. Chrome を起動し、ダウンロードした `index.html` を開く。
+1. Chrome を起動し、ダウンロードしたリポジトリ内の `source/index.html` を開く。
 1. デバイスに 四角形 のアイコンが表示されていることを確認する。チェックマークのアイコンが表示されている場合はデバイスをリセットする。
 1. ブラウザの `Connect` ボタンを押す。ダイアログボックスのリストから `BBC micro:bit [.....]` の名前のデバイスを選択する。
 1. 接続が成功すると、ブラウザの `Connection Status` フィールドに `Connected` が表示される。またデバイスにはチェックマークのアイコンが表示される。

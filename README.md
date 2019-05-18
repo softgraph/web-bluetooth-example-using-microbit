@@ -81,14 +81,11 @@
 
 ### Browser Side
 
-1. Download the following three files.
-	+ Save [index.html](ble/index.html) as `index.html`
-	+ Save [main.js](ble/main.js) as `main.js`
-	+ Save [theme.css](ble/theme.css) as `theme.css`
+1. Clone [the repositry (github.com/softgraph)](https://github.com/softgraph/web-bluetooth-example-using-microbit).
 
 ## Operations
 
-1. Launch Chrome and open downloaded `index.html`.
+1. Launch Chrome and open `source/index.html` in the downloaded repositry.
 1. Make sure that the device shows a square icon. Reset the device if it shows a yes (checkmark) icon.
 1. Press `Connect` button on the browser. Choose a device named `BBC micro:bit [.....]` from the list on the dialog box.
 1. When connection is established, `Connection Status` field on the browser shows `Connected`. Also, the device shows a yes (checkmark) icon.
