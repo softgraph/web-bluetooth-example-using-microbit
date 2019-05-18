@@ -1,6 +1,6 @@
-# Web Bluetooth example using BBC micro:bit
+[ [English](README.md) ]
 
-[English](README.md)
+# Web Bluetooth example using BBC micro:bit
 
 ## 注意
 
