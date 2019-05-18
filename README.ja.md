@@ -79,11 +79,11 @@
 
 ### ブラウザ側
 
-1. [web-bluetooth-example-using-microbit](https://github.com/softgraph/web-bluetooth-example-using-microbit) リポジトリをクローンする。
+1. [本リポジトリ (`web-bluetooth-example-using-microbit`)](https://github.com/softgraph/web-bluetooth-example-using-microbit) をクローンする。
 
 ## 手順
 
-1. Chrome を起動し、ダウンロードしたリポジトリ内の `source/index.html` を開く。
+1. Chrome を起動し、クローンしたリポジトリ内の `source/index.html` を開く。
 1. デバイスに 四角形 のアイコンが表示されていることを確認する。チェックマークのアイコンが表示されている場合はデバイスをリセットする。
 1. ブラウザの `Connect` ボタンを押す。ダイアログボックスのリストから `BBC micro:bit [.....]` の名前のデバイスを選択する。
 1. 接続が成功すると、ブラウザの `Connection Status` フィールドに `Connected` が表示される。またデバイスにはチェックマークのアイコンが表示される。
