@@ -2,7 +2,7 @@
 
 # Web Bluetooth example using BBC micro:bit
 
-## 注意
+## ノート
 
 + Web Bluetooth API のサポートは Chrome (>= 56) または Opera (>= 43) に限定されているかもしれません。
 + 以下の内容は macOS 10.14 上で Chrome 74 および Bluetooth Explorer for Xcode 10.2 を使って検証しました。
