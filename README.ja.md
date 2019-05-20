@@ -14,8 +14,8 @@
 <table>
 <tr>
 <td align="center">
-	Microsoft Makecode を使って<br>
-	Blocks/JavaScript で書かれたコード<br>
+	Microsoft Makecode を使って <br>
+	Blocks/JavaScript で書かれたコード
 	</td>
 	</tr>
 <tr>

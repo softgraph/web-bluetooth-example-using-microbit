@@ -14,9 +14,8 @@
 <table>
 <tr>
 <td align="center">
-	Your code written in <br>
-	Blocks/JavaScript using <br>
-	Microsoft Makecode
+	Your code written in Blocks/JavaScript <br>
+	using Microsoft Makecode
 	</td>
 	</tr>
 <tr>
@@ -36,8 +35,7 @@
 <table>
 <tr>
 <td align="center">
-	Your code written in <br>
-	JavaScript
+	Your code written in JavaScript
 	</td>
 	</tr>
 <tr>
