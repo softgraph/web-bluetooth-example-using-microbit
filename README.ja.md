@@ -1,6 +1,6 @@
 [ [English](README.md) ] [ 日本語 ]
 
-# Web Bluetooth example using BBC micro:bit
+# BBC micro:bit を使った Web Bluetooth 利用例
 
 ## 注記
 
