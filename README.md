@@ -95,6 +95,7 @@
 
 + [micro:bit Bluetooth Profile (lancaster-university.github.io)](https://lancaster-university.github.io/microbit-docs/ble/profile/)
 + [micro:bit Bluetooth profile specification (lancaster-university.github.io)](https://lancaster-university.github.io/microbit-docs/resources/bluetooth/bluetooth_profile.html)
++ [MakeCode reference for micro:bit Bluetooth (makecode.microbit.org)](https://makecode.microbit.org/reference/bluetooth)
 
 ### Web Bluetooth
 
