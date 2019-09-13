@@ -55,7 +55,7 @@
 
 ### Device Side
 
-1. Launch Chrome (or any browser) on your PC.
+1. Launch any browser on your PC.
 1. Open [Microsoft Makecode for micro:bit](https://makecode.microbit.org/) site.
 1. Create a `New Project`.
 1. Add extension `Bluetooth` from `Advanced` -> `Extensions` if it is not listed. Note that extension `Radio` will be removed if you add `Bluetooth`.
@@ -83,7 +83,7 @@
 
 ## Operations
 
-1. Launch Chrome and open `source/index.html` in the cloned repositry.
+1. Launch Chrome or Opera and open `source/index.html` in the cloned repositry.
 1. Make sure that the device shows a square icon. Reset the device if it shows a yes (checkmark) icon.
 1. Press `Connect` button on the browser. Choose a device named `BBC micro:bit [.....]` from the list on the dialog box.
 1. When connection is established, `Connection Status` field on the browser shows `Connected`. Also, the device shows a yes (checkmark) icon.
