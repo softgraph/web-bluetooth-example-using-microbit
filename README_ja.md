@@ -55,7 +55,7 @@
 
 ### デバイス側
 
-1. PC で Chrome (または任意の browser) を起動する。
+1. PC で 任意の browser を起動する。
 1. [Microsoft Makecode for micro:bit](https://makecode.microbit.org/) サイトを開く。
 1. `新しいプロジェクト (New Project)` を作成。
 1. 拡張機能 `Bluetooth` が表示されていない場合、`高度なブロック (Advanced)` → `拡張機能 (Extensions)` から追加する。`Bluetooth` を追加すると 拡張機能 `無線 (Radio)` は削除される。
@@ -83,7 +83,7 @@
 
 ## 手順
 
-1. Chrome を起動し、クローンしたリポジトリ内の `source/index.html` を開く。
+1. Chrome または Opera を起動し、クローンしたリポジトリ内の `source/index.html` を開く。
 1. デバイスに 四角形 のアイコンが表示されていることを確認する。チェックマークのアイコンが表示されている場合はデバイスをリセットする。
 1. ブラウザの `Connect` ボタンを押す。ダイアログボックスのリストから `BBC micro:bit [.....]` の名前のデバイスを選択する。
 1. 接続が成功すると、ブラウザの `Connection Status` フィールドに `Connected` が表示される。またデバイスにはチェックマークのアイコンが表示される。
