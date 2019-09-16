@@ -2,10 +2,10 @@
 
 # BBC micro:bit を使った Web Bluetooth 利用例
 
-## 注記
+## メモ
 
 + Web Bluetooth API のサポートは Chrome (>= 56) または Opera (>= 43) に限定されているかもしれません。
-+ 以下の内容は macOS 10.14 上で Chrome 74 および Bluetooth Explorer for Xcode 10.2 を使って検証しました。
++ 以下の内容は macOS 10.14 上で Chrome 77 および Bluetooth Explorer for Xcode 10.2 を使って検証しました。
 
 ## システム構成
 
@@ -58,7 +58,7 @@
 1. PC で 任意の browser を起動する。
 1. [Microsoft Makecode for micro:bit](https://makecode.microbit.org/) サイトを開く。
 1. `新しいプロジェクト (New Project)` を作成。
-1. 拡張機能 `Bluetooth` が表示されていない場合、`高度なブロック (Advanced)` → `拡張機能 (Extensions)` から追加する。`Bluetooth` を追加すると 拡張機能 `無線 (Radio)` は削除される。
+1. 拡張機能 `Bluetooth` が表示されていない場合、`高度なブロック (Advanced)` → `拡張機能 (Extensions)` から追加する。`Bluetooth` を追加すると、同時に使用できない拡張機能 `無線 (Radio)` は削除される。
 1. 編集モードを `ブロック (Blocks)` から `JavaScript` に変更し、次のコードで置き換える。
 
 		bluetooth.onBluetoothConnected(function () {
@@ -67,8 +67,17 @@
 		bluetooth.onBluetoothDisconnected(function () {
 			basic.showIcon(IconNames.Square)
 		})
+		bluetooth.onUartDataReceived(serial.delimiters(Delimiters.NewLine), function () {
+			str = bluetooth.uartReadUntil(serial.delimiters(Delimiters.NewLine))
+			basic.showIcon(IconNames.Heart)
+			bluetooth.uartWriteString("Received " + str + "\n")
+			basic.pause(500)
+			basic.showIcon(IconNames.Yes)
+		})
+		let str = ""
 		bluetooth.startButtonService()
 		bluetooth.startLEDService()
+		bluetooth.startUartService()
 		basic.showIcon(IconNames.Square)
 
 1. `プロジェクトの設定 (Project Settings)` を開き、ペアリング方法を `JustWorks pairing (default)` から `No Pairing Required` に変更する。この設定は本実験に必須。

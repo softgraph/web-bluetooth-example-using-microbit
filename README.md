@@ -2,10 +2,10 @@
 
 # Web Bluetooth example using BBC micro:bit
 
-## N.B.
+## Note
 
 + The support for Web Bluetooth API may be limited to Chrome (>= 56) or Opera (>= 43).
-+ The following contents are verified on macOS 10.14 using Chrome 74 and Bluetooth Explorer for Xcode 10.2.
++ The following contents are verified on macOS 10.14 using Chrome 77 and Bluetooth Explorer included in Additional Tools for Xcode 10.2.
 
 ## System Structure
 
@@ -58,7 +58,7 @@
 1. Launch any browser on your PC.
 1. Open [Microsoft Makecode for micro:bit](https://makecode.microbit.org/) site.
 1. Create a `New Project`.
-1. Add extension `Bluetooth` from `Advanced` -> `Extensions` if it is not listed. Note that extension `Radio` will be removed if you add `Bluetooth`.
+1. Add extension `Bluetooth` from `Advanced` -> `Extensions` if it is not listed. Note that incompatible extension `Radio` will be removed when you add `Bluetooth`.
 1. Switch editor mode from `Blocks` to `JavaScript` and replace the existing code with the following.
 
 		bluetooth.onBluetoothConnected(function () {
@@ -67,8 +67,17 @@
 		bluetooth.onBluetoothDisconnected(function () {
 			basic.showIcon(IconNames.Square)
 		})
+		bluetooth.onUartDataReceived(serial.delimiters(Delimiters.NewLine), function () {
+			str = bluetooth.uartReadUntil(serial.delimiters(Delimiters.NewLine))
+			basic.showIcon(IconNames.Heart)
+			bluetooth.uartWriteString("Received " + str + "\n")
+			basic.pause(500)
+			basic.showIcon(IconNames.Yes)
+		})
+		let str = ""
 		bluetooth.startButtonService()
 		bluetooth.startLEDService()
+		bluetooth.startUartService()
 		basic.showIcon(IconNames.Square)
 
 1. Open `Project Settings` and change paring method from `JustWorks pairing (default)` to `No Pairing Required`. This setting is required for this experiment.
