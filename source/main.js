@@ -1,19 +1,8 @@
-
-// ------------------------------------------------------------
-//	Interface to the html
-// ------------------------------------------------------------
-
-//	<input type="text">
-const kIdConnectionStatusText = 'id_input_text_connection_status';
-const kIdButtonStatusText = 'id_input_text_button_status';
-
-//	<textarea>
-const kIdDeviceInformationText = 'id_textarea_device_information';
-
-//	<button>
-const kIdConnectButton = 'id_button_connect';
-const kIdDisconnectButton = 'id_button_disconnect';
-const kIdSayHelloButton = 'id_button_say_hello';
+/* eslint-env browser, es6 */
+/*
+	see also:
+	https://eslint.org/docs/user-guide/configuring#specifying-environments
+*/
 
 // ------------------------------------------------------------
 //	Interface to micro:bit Bluetooth Profile
@@ -67,7 +56,7 @@ const kModelNumberString = '00002a24-0000-1000-8000-00805f9b34fb';
 		1. Serial Number : utf8s
 */
 
-const kSerialNumberString = '00002a25-0000-1000-8000-00805f9b34fb';
+//  const kSerialNumberString = '00002a25-0000-1000-8000-00805f9b34fb';
 
 /*
 	Firmware Revision String
@@ -147,7 +136,7 @@ const kLedService = 'e95dd91d-251d-470a-a062-fa1922dfa9a8';
 		Octet 1 represents the second row and so on.
 		In each octet, bit 4 corresponds to the first LED in the row, bit 3 the second and so on. 
 		Bit values represent the state of the related LED: off (0) or on (1).
-		
+
 		So we have:
 		Octet 0, LED Row 1: bit4 bit3 bit2 bit1 bit0
 		Octet 1, LED Row 2: bit4 bit3 bit2 bit1 bit0
@@ -185,24 +174,304 @@ const kLedText = 'e95d93ee-251d-470a-a062-fa1922dfa9a8';
 const kScrollingDelay = 'e95d0d2d-251d-470a-a062-fa1922dfa9a8';
 
 // ------------------------------------------------------------
+//	UART Service
+// ------------------------------------------------------------
 
-const kScrollingDelayInMilliseconds = 100;
+/*
+	UART Service
+	- UUID:
+		6E400001B5A3F393E0A9E50E24DCCA9E
+	- Summary:
+		This is an implementation of Nordic Semicondutor's UART/Serial Port Emulation over Bluetooth low energy.
+		See https://developer.nordicsemi.com/nRF5_SDK/nRF51_SDK_v8.x.x/doc/8.0.0/s110/html/a00072.html for the original Nordic Semiconductor documentation by way of background.
+*/
 
-var gDevice = null;
-var gLedMatrixState = null;
-var gLedText = null;
+const kUartService = '6e400001-b5a3-f393-e0a9-e50e24dcca9e';
+
+
+/*
+	TX Characteristic
+	- UUID:
+		6E400002B5A3F393E0A9E50E24DCCA9E
+	- Summary:
+		This characteristic allows the micro:bit to transmit a byte array containing an arbitrary number of arbitrary octet values to a connected device.
+		The maximum number of bytes which may be transmitted in one PDU is limited to the MTU minus three or 20 octets to be precise.
+		Specifies a millisecond delay to wait for in between showing each character on the display.
+	Fields:
+		1. UART TX Field : uint8[]
+*/
+
+const kTxCharacteristic = '6e400002-b5a3-f393-e0a9-e50e24dcca9e';
+
+/*
+	RX Characteristic
+	- UUID:
+		6E400003B5A3F393E0A9E50E24DCCA9E
+	- Summary:
+		This characteristic allows a connected client to send a byte array containing an arbitrary number of arbitrary octet values to a connected micro:bit.
+		The maximum number of bytes which may be transmitted in one PDU is limited to the MTU minus three or 20 octets to be precise.
+		Specifies a millisecond delay to wait for in between showing each character on the display.
+	Fields:
+		1. UART TX Field : uint8[]
+*/
+
+const kRxCharacteristic = '6e400003-b5a3-f393-e0a9-e50e24dcca9e';
+
+// ------------------------------------------------------------
+//	HTML Framework
+// ------------------------------------------------------------
+
+/**
+	A `TextArea` obejct represents a html element of `<input type="text">` or `<textarea>`.
+*/
+class TextArea {
+	constructor(id) {
+		this.id = id;			// id: String
+		this.target = null;		// target: Element
+	}
+	set text(newValue) {
+		if(!this.target) {
+			this.target = document.getElementById(this.id);
+		}
+		this.target.value = newValue;
+	}
+	get text() {
+		if(!this.target) {
+			this.target = document.getElementById(this.id);
+		}
+		return this.target.value;
+	}
+}
+
+/**
+	A `Button` obejct represents a html element of `<button>. The object can handle events of type `click`.
+*/
+class Button {
+	constructor(id) {
+		this.id = id;			// id: String
+		this.target = null;		// target: Element
+	}
+	addClickEventListener(listener) {	// listener: function( Event )
+		if(!this.target) {
+			this.target = document.getElementById(this.id);
+		}
+		this.target.addEventListener('click', listener, false);
+	}
+}
+
+// ------------------------------------------------------------
+//	Bluetooth Framework
+// ------------------------------------------------------------
+
+/**
+	A `BtServer` obejct represents a GATT server on a remote Bluetooth device.
+*/
+class BtServer {
+	constructor(bluetoothDevice, bluetoothServer, serviceUuidList) {
+		this.device = bluetoothDevice;		// device: BluetoothDevice
+		this.target = bluetoothServer;		// target: BluetoothRemoteGATTServer
+		this.uuidList = serviceUuidList;	// uuidList: [ UUID ]
+		this.btServices = new Map();		// btServices: { UUID, BtService }
+		this.btCharacteristics = new Map();	// btCharacteristics: { UUID, BtCharacteristic }
+	}
+	getPrimaryServices() {
+		return this.uuidList.map(x => this.target.getPrimaryService(x));
+	}
+	getCharacteristics() {
+		return this.uuidList.flatMap(x => this.btServices.get(x).getCharacteristics());
+	}
+	registerBtService(uuid, btService) {
+		this.btServices.set(uuid, btService);
+	}
+	getBtService(uuid) {
+		return this.btServices.get(uuid);
+	}
+	registerBtCharacteristic(uuid, btCharacteristic) {
+		this.btCharacteristics.set(uuid, btCharacteristic);
+	}
+	getBtCharacteristic(uuid) {
+		return this.btCharacteristics.get(uuid);
+	}
+}
+
+/**
+	A `BtService` obejct represents a GATT service on a remote Bluetooth device.
+*/
+class BtService {
+	static registerServices(btServer, bluetoothServices, characteristicUuidLists) {
+		let i = 0;
+		let bluetoothService;
+		for (bluetoothService of bluetoothServices) {
+			// create an object and register it to the btServer.
+			new BtService(btServer, bluetoothService, characteristicUuidLists[i++]);
+		}
+	}
+	constructor(btServer, bluetoothService, characteristicUuidList) {
+		this.btServer = btServer;				// btServer: BtServer
+		this.target = bluetoothService;			// target: BluetoothGATTService
+		this.uuidList = characteristicUuidList;	// uuidList: [ UUID ]
+		this.init();
+	}
+	init() {
+		this.btServer.registerBtService(this.target.uuid, this);
+	}
+	getCharacteristics() {
+		return this.uuidList.map(x => this.target.getCharacteristic(x));
+	}
+}
+
+/**
+	A `BtCharacteristic` obejct represents a GATT characteristic on a remote Bluetooth device.
+*/
+class BtCharacteristic {
+	static registerCharacteristics(btServer, bluetoothCharacteristics) {	// bluetoothCharacteristics: [ BluetoothGATTCharacteristic ]
+		let bluetoothCharacteristic;
+		for (bluetoothCharacteristic of bluetoothCharacteristics) {
+			// create an object and register it to the btServer.
+			new BtCharacteristic(btServer, bluetoothCharacteristic);
+		}
+	}
+	constructor(btServer, bluetoothCharacteristic) {
+		this.btServer = btServer;				// btServer: BtServer
+		this.target = bluetoothCharacteristic;	// target: BluetoothGATTCharacteristic
+		this.receiver = null;					// receiver: function( ArrayBuffer ) or function( String )
+		this.init();
+	}
+	init() {
+		this.btServer.registerBtCharacteristic(this.target.uuid, this);
+	}
+	addValueChangedEventListener(listener) {	// listener: function( Event )
+		this.target.startNotifications().then(characteristic => {	// BluetoothRemoteGATTCharacteristic
+			characteristic.addEventListener('characteristicvaluechanged', listener);
+		});
+	}
+	readData() {
+		this.target.readValue().then(data => {	// data: ArrayBuffer
+			this.receiver(data);
+		}).catch(reason => {
+			alert(reason);
+		});
+	}
+	readText() {
+		this.target.readValue().then(data => {	// data: ArrayBuffer
+			const decoder = new TextDecoder();
+			const text = decoder.decode(data);
+			this.receiver(text);
+		}).catch(reason => {
+			alert(reason);
+		});
+	}
+	writeData(data) {	// data: ArrayBuffer
+		this.target.writeValue(data);
+	}
+	writeText(text) {	// text: String
+		let length = text.length;
+		if(length > 0) {
+			const encoder = new TextEncoder();
+			this.target.writeValue(encoder.encode(text));
+		}
+	}
+}
+
+// ------------------------------------------------------------
+//	Interface to the html
+// ------------------------------------------------------------
+
+//	Button objects
+
+let gConnectButton		= new Button('id_button_connect');
+let gDisconnectButton	= new Button('id_button_disconnect');
+let gShowMessageButton	= new Button('id_button_show_message');
+let gSendRequestButton	= new Button('id_button_send_request');
+
+//	TextArea objects
+
+let gConnectionStatusTextArea	= new TextArea('id_input_text_connection_status');
+let gModelNumberTextArea		= new TextArea('id_input_text_model_number');
+let gFirmwareRevisionTextArea	= new TextArea('id_input_text_firmware_revision');
+let gButtonStatusTextArea		= new TextArea('id_input_text_button_status');
+let gMessageTextArea			= new TextArea('id_input_text_message');
+let gRequesTextArea				= new TextArea('id_input_text_request');
+let gResponseTextArea			= new TextArea('id_input_text_response');
+
+// ------------------------------------------------------------
+//	Interface to the Bluetooth device
+// ------------------------------------------------------------
+
+/**
+	The global `BluetoothDevice` obejct for the connected Bluetooth device.
+*/
+let gDevice = null;
+
+/**
+	The global `BtServer` obejct for the connected Bluetooth device.
+*/
+let gBtServer = null;
+
+/**
+	Bluetooth device filter.
+*/
+const sBtDeviceFilter = {
+	namePrefix: 'BBC micro:bit'	// e.g., 'BBC micro:bit [vagip]'
+};
+
+/**
+	Bluetooth service uuid list.
+*/
+const sBtServiceUuidList = [
+	kDeviceInformation,
+	kUartService,
+	kButtonService,
+	kLedService
+];
+
+/**
+	Bluetooth characteristic uuid list.
+	
+	Note that `kSerialNumberString` is blocked with the following error.
+	- SecurityError: getCharacteristic(s) called with blocklisted UUID.
+	See also
+	- https://goo.gl/4NeimX
+*/
+const sBtCharacteristicUuidList = [
+	[
+		kModelNumberString,
+	//	kSerialNumberString,
+		kFirmwareRevisionString
+	],
+	[
+		kTxCharacteristic,
+		kRxCharacteristic
+	],
+	[
+		kButtonAState,
+		kButtonBState
+	],
+	[
+		kLedMatrixState,
+		kLedText,
+		kScrollingDelay
+	]
+];
+
+// ------------------------------------------------------------
+
+const kScrollingDelayInMilliseconds = 100;	// 100;
+
+// ------------------------------------------------------------
+//	Window events
+// ------------------------------------------------------------
 
 window.onload = onWindowLoad;
 
 function onWindowLoad() {
 	window.onbeforeunload = onWindowBeforeUnload;
-	document.getElementById(kIdConnectButton).addEventListener(
-		'click', onConnectButtonClick, false);
-	document.getElementById(kIdDisconnectButton).addEventListener(
-		'click', onDisconnectButtonClick, false);
-	document.getElementById(kIdSayHelloButton).addEventListener(
-		'click', onSayHelloButtonClick, false);
-};
+
+	gConnectButton.addClickEventListener(onConnectButtonClick);
+	gDisconnectButton.addClickEventListener(onDisconnectButtonClick);
+	gShowMessageButton.addClickEventListener(onShowMessageButtonClick);
+	gSendRequestButton.addClickEventListener(onSendRequestButtonClick);
+}
 
 function onWindowBeforeUnload() {
 	if(gDevice && gDevice.gatt.connected) {
@@ -210,212 +479,217 @@ function onWindowBeforeUnload() {
 	}
 }
 
+// ------------------------------------------------------------
+//	Bluetooth connection
+// ------------------------------------------------------------
+
 function onConnectButtonClick() {
+	if (!navigator.bluetooth) {
+		alert(`Web Bluetooth is not available on this browser.`);
+		return;
+	}
+	gConnectionStatusTextArea.text = 'Connecting...';
 	navigator.bluetooth.requestDevice({
-		filters: [{
-			namePrefix: 'BBC micro:bit'	// e.g., 'BBC micro:bit [vagip]'
-		}],
-		optionalServices: [
-			kDeviceInformation,
-			kButtonService,
-			kLedService
-		]
-	}).then(device => {
-		// device: Promise to BluetoothDevice
+		filters: [sBtDeviceFilter],
+		optionalServices: sBtServiceUuidList
+	}).then(device => {		// device: BluetoothDevice
 		gDevice = device;
 		return device.gatt.connect();
-	}).then(server => {
-		// server: Promise to BluetoothRemoteGATTServer
-		return Promise.all([
-			server.getPrimaryService(kDeviceInformation),
-			server.getPrimaryService(kButtonService),
-			server.getPrimaryService(kLedService)
-		]);
-	}).then(services => {
-		// services: Promise to [BluetoothGATTService]
-		return Promise.all([
-			services[0].getCharacteristic(kModelNumberString),
-			//	services[0].getCharacteristic(kSerialNumberString),
-			/*
-				Note that the above call is failed with the following error.
-				- SecurityError: getCharacteristic(s) called with blocklisted UUID. https://goo.gl/4NeimX
-			*/
-			services[0].getCharacteristic(kFirmwareRevisionString),
-			services[1].getCharacteristic(kButtonAState),
-			services[1].getCharacteristic(kButtonBState),
-			services[2].getCharacteristic(kLedMatrixState),
-			services[2].getCharacteristic(kLedText),
-			services[2].getCharacteristic(kScrollingDelay)
-		]);
-	}).then(characteristics => {
-		// characteristics: Promise to [BluetoothGATTCharacteristic]
-		const decoder = new TextDecoder();
-		var i = 0;
-		characteristics[i++].readValue().then(data => {
-			// data: Promise to DataView
-			let deviceInfoText = document.getElementById(kIdDeviceInformationText);
-			deviceInfoText.value = "Model Number: " + decoder.decode(data) + "\n";
-		});
-		/*
-		characteristics[i++].readValue().then(data => {
-			// data: Promise to DataView
-			let deviceInfoText = document.getElementById(kIdDeviceInformationText);
-			deviceInfoText.value += "Serial Number: " + decoder.decode(data) + "\n";
-		});
-		*/
-		characteristics[i++].readValue().then(data => {
-			// data: Promise to DataView
-			let deviceInfoText = document.getElementById(kIdDeviceInformationText);
-			deviceInfoText.value += "Firmware Revision: " + decoder.decode(data) + "\n";
-		});
-		characteristics[i++].startNotifications().then(characteristic => {
-			// characteristic: Promise to BluetoothRemoteGATTCharacteristic
-			characteristic.addEventListener(
-				'characteristicvaluechanged', handleButtonAStateChanged);
-		});
-		characteristics[i++].startNotifications().then(characteristic => {
-			// characteristic: Promise to BluetoothRemoteGATTCharacteristic
-			characteristic.addEventListener(
-				'characteristicvaluechanged', handleButtonBStateChanged);
-		});
-		gLedMatrixState = characteristics[i++];
-		gLedText = characteristics[i++];
-
-		/*
-			The following `data` definitions are available except for (a)
-			as a parameter for writeValue() to Scrolling_Delay_Value of uint16.
-			Because `DataView` is a common interface for low-level data conversion,
-			it seems only (a) is correct, but the result is not.
-		*/
-
-		/*
-			- (a) DataView contains a uint16 value
-		*
-		var data = new DataView(new ArrayBuffer(2));
-		data.setUint16(0, kScrollingDelayInMilliseconds);
-		*/
-
-		/*
-			- (b) DataView contains a swapped uint16 value
-		*
-		var data = new DataView(new ArrayBuffer(2));
-		data.setUint16(0,
-			((kScrollingDelayInMilliseconds << 8) & 0xff00) +
-			((kScrollingDelayInMilliseconds >> 8) & 0x00ff)
-		);
-		*/
-
-		/*
-			- (c) DataView contains a uint8 value
-		*
-		var data = new DataView(new ArrayBuffer(1));
-		data.setUint8(0, kScrollingDelayInMilliseconds);
-		*/
-
-		/*
-			- (d) Uint16Array with an element
-		*/
-		var data = Uint16Array.of(kScrollingDelayInMilliseconds);
-
-		characteristics[i++].writeValue(data /* as ArrayBuffer */);
-
-		let statusText = document.getElementById(kIdConnectionStatusText);
-		statusText.value = 'Connected';
+	}).then(server => {		// server: BluetoothRemoteGATTServer
+		gBtServer = new BtServer(gDevice, server, sBtServiceUuidList);
+		return Promise.all(gBtServer.getPrimaryServices());
+	}).then(services => {	// services: [ BluetoothGATTService ]
+		BtService.registerServices(gBtServer, services, sBtCharacteristicUuidList);
+		return Promise.all(gBtServer.getCharacteristics());
+	}).then(characteristics => {	// characteristics: [ BluetoothGATTCharacteristic ]
+		BtCharacteristic.registerCharacteristics(gBtServer, characteristics);
+		handleConnected();
+		gConnectionStatusTextArea.text = 'Connected';
 	}).catch(reason => {
 		alert(reason);
 	});
 }
 
+function handleConnected() {
+	retrieveDeviceInformation();
+	setScrollingDelay();
+	observeButtons();
+	observeUart();
+}
+
 function onDisconnectButtonClick() {
-	let statusText = document.getElementById(kIdConnectionStatusText);
 	if(gDevice && gDevice.gatt.connected) {
 		gDevice.gatt.disconnect();
 		if(gDevice.gatt.connected) {
-			statusText.value = 'Disconnection Failed';
+			gConnectionStatusTextArea.text = 'Disconnection Failed';
 		}
 		else {
-			statusText.value = 'Disconnected';
+			gConnectionStatusTextArea.text = 'Disconnected';
 		}
 	}
 	else {
-		statusText.value = 'Not Connected';
+		gConnectionStatusTextArea.text = 'Not Connected';
 	}
 	gDevice = null;
-	gLedMatrixState = null;
-	gLedText = null;
 }
 
-function onSayHelloButtonClick() {
-	if(gLedText) {
-		try {
-			const encoder = new TextEncoder();
-			gLedText.writeValue(encoder.encode('Hello'));
-			setTimeout(showCheckmark, kScrollingDelayInMilliseconds * 6 * 6);
-		}
-		catch (reason) {
-			alert(reason);
-		}
+// ------------------------------------------------------------
+//	Device Information
+// ------------------------------------------------------------
+
+function retrieveDeviceInformation() {
+	let btCharacteristic = gBtServer.getBtCharacteristic(kModelNumberString);
+	if(btCharacteristic) {
+		btCharacteristic.receiver = function (text) {
+			gModelNumberTextArea.text = text;
+		};
+		btCharacteristic.readText();
+	}
+	btCharacteristic = gBtServer.getBtCharacteristic(kFirmwareRevisionString);
+	if(btCharacteristic) {
+		btCharacteristic.receiver = function (text) {
+			gFirmwareRevisionTextArea.text = text;
+		};
+		btCharacteristic.readText();
 	}
 }
 
-function showCheckmark() {
-	if(gLedMatrixState) {
-		try {
-			/*
-				The following `data` definitions are available as a parameter for
-				writeValue() to LED_Matrix_State of uint8[].
-				Because `DataView` is a common interface for low-level data conversion,
-				it seems (a) is the most correct, but (b) is simpler and also valid for uint8 stream.
-			*/
+// ------------------------------------------------------------
+//	Button Service
+// ------------------------------------------------------------
 
-			/*
-				- (a) DataView contains 5 uint8 values
-			*
-			var data = new DataView(new ArrayBuffer(5));
-			data.setUint8(0, 0x00);
-			data.setUint8(1, 0x01);
-			data.setUint8(2, 0x02);
-			data.setUint8(3, 0x14);
-			data.setUint8(4, 0x08);
-			*/
-
-			/*
-				- (b) Uint8Array with 5 elements
-			*/
-			var data = Uint8Array.of(0x00, 0x01, 0x02, 0x14, 0x08);
-
-			gLedMatrixState.writeValue(data /* as ArrayBuffer */);
-		}
-		catch (reason) {
-			alert(reason);
-		}
+function observeButtons()
+{
+	let btCharacteristic;
+	btCharacteristic = gBtServer.getBtCharacteristic(kButtonAState);
+	if(btCharacteristic) {
+		btCharacteristic.addValueChangedEventListener(handleButtonAStateChanged);
+	}
+	btCharacteristic = gBtServer.getBtCharacteristic(kButtonBState);
+	if(btCharacteristic) {
+		btCharacteristic.addValueChangedEventListener(handleButtonBStateChanged);
 	}
 }
 
 function handleButtonAStateChanged(event) {
-	let statusText = document.getElementById(kIdButtonStatusText);
-	let buttonState = event.target.value.getUint8(0);
-	if(buttonState == 1) {
-		statusText.value = 'Button A Pressed';
+	let value = event.target.value.getUint8(0);
+	if(value == 1) {
+		gButtonStatusTextArea.text = 'Button A Pressed';
 	}
-	else if(buttonState == 2) {
-		statusText.value = 'Button A Long Pressed';
+	else if(value == 2) {
+		gButtonStatusTextArea.text = 'Button A Long Pressed';
 	}
 	else {
-		statusText.value = '';
+		gButtonStatusTextArea.text = '';
 	}
 }
 
 function handleButtonBStateChanged(event) {
-	let statusText = document.getElementById(kIdButtonStatusText);
-	let buttonState = event.target.value.getUint8(0);
-	if(buttonState == 1) {
-		statusText.value = 'Button B Pressed';
+	let value = event.target.value.getUint8(0);
+	if(value == 1) {
+		gButtonStatusTextArea.text = 'Button B Pressed';
 	}
-	else if(buttonState == 2) {
-		statusText.value = 'Button B Long Pressed';
+	else if(value == 2) {
+		gButtonStatusTextArea.text = 'Button B Long Pressed';
 	}
 	else {
-		statusText.value = '';
+		gButtonStatusTextArea.text = '';
 	}
 }
+
+// ------------------------------------------------------------
+//	LED Service
+// ------------------------------------------------------------
+
+function setScrollingDelay() {
+	const btCharacteristic = gBtServer.getBtCharacteristic(kScrollingDelay);
+	if(!btCharacteristic) {
+		return;
+	}
+	//	use platform's endianness as
+	//		let data = Uint16Array.of(kScrollingDelayInMilliseconds);
+	//	or use little endian explicitly
+	let data = new DataView(new ArrayBuffer(2));
+	data.setUint16(0, kScrollingDelayInMilliseconds, true);
+	btCharacteristic.writeData(data);
+}
+
+function onShowMessageButtonClick() {
+	const btCharacteristic = gBtServer.getBtCharacteristic(kLedText);
+	if(!btCharacteristic) {
+		return;
+	}
+	try {
+		const text = gMessageTextArea.text;
+		const length = text.length;
+		if(length > 0) {
+			btCharacteristic.writeText(text);
+			setTimeout(showCheckmark, kScrollingDelayInMilliseconds * 6 * (length + 2));
+		}
+	}
+	catch (reason) {
+		alert(reason);
+	}
+}
+
+function showCheckmark() {
+	const btCharacteristic = gBtServer.getBtCharacteristic(kLedMatrixState);
+	if(!btCharacteristic) {
+		return;
+	}
+	try {
+		let data = Uint8Array.of(
+			0x00,	//	- - - - -
+			0x01,	//	- - - - X
+			0x02,	//	- - - X -
+			0x14,	//	X - X - -
+			0x08	//	- X - - -
+		);
+		btCharacteristic.writeData(data);
+	}
+	catch (reason) {
+		alert(reason);
+	}
+}
+
+// ------------------------------------------------------------
+//	UART Seervice
+// ------------------------------------------------------------
+
+function onSendRequestButtonClick() {
+	const txCharacteristic = gBtServer.getBtCharacteristic(kRxCharacteristic);
+	if(txCharacteristic) {
+		try {
+			/*
+			let data = Uint8Array.of(0x4a, 0x42, 0x3A);
+			txCharacteristic.writeData(data);
+			*/
+			let text = gRequesTextArea.text;
+			const length = text.length;
+			if(length > 0) {
+				text += '\n';
+				txCharacteristic.writeText(text);
+			}
+		}
+		catch (reason) {
+			alert(reason);
+		}
+	}
+}
+
+function observeUart()
+{
+	let btCharacteristic = gBtServer.getBtCharacteristic(kTxCharacteristic);
+	if(btCharacteristic) {
+		btCharacteristic.addValueChangedEventListener(handleTxCharacteristicChanged);
+	}
+}
+
+function handleTxCharacteristicChanged(event) {
+	const data = event.target.value;
+	const decoder = new TextDecoder();
+	const text = decoder.decode(data);
+	gResponseTextArea.text = text;
+}
+
+// ------------------------------------------------------------

@@ -1,71 +1,82 @@
 <!DOCTYPE html>
 
-<html>
-<head>
-<meta charset="utf-8">
-<link rel="stylesheet" type="text/css" href="theme.css">
-<title>
-	Controllrig micro:bit device via Web Bluetooth API
-	</title>
-	</head>
+	<html><head>
 
-<body>
-<h2>
-	Controllrig micro:bit device via Web Bluetooth API
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="theme.css">
+
+	<title>
+Controllrig micro:bit device via Web Bluetooth API
+	</title>
+
+	</head><body>
+
+	<h2>
+Controllrig micro:bit device via Web Bluetooth API
 	</h2>
 
-<table>
-<tr>
-<td>
-<div>
-	Connection Status:
-	</div>
-	</td>
+	<table>
 
-<td>
-<input id="id_input_text_connection_status" type="text" size="40" readonly>
-	</td>
-	</tr>
+	<tr><td><div>
+	<button type="button" id="id_button_connect">
+Connect
+	</button>
+	<button type="button" id="id_button_disconnect">
+Disconnect
+	</button>
+	</div></td><td>
+	</td></tr>
 
-<tr>
-<td>
-<div>
-	Button Status:
-	</div>
-	</td>
+	<tr><td><div>
+Connection Status:
+	</div></td><td>
+	<input id="id_input_text_connection_status" type="text" size="40" readonly>
+	</td></tr>
 
-<td>
-<input id="id_input_text_button_status" type="text" size="40" readonly>
-	</td>
-	</tr>
+	<tr><td><div>
+Model Number:
+	</div></td><td>
+	<input id="id_input_text_model_number" type="text" size="40" readonly>
+	</td></tr>
 
-<tr>
-<td>
-<div>
-	Device Information:
-	</div>
-	</td>
+	<tr><td><div>
+Firmware Revision:
+	</div></td><td>
+	<input id="id_input_text_firmware_revision" type="text" size="40" readonly>
+	</td></tr>
 
-<td>
-<textarea id="id_textarea_device_information" rows="4" cols="40" readonly>
-	</textarea>
-	</td>
-	</tr>
+	<tr><td><div>
+Button Status:
+	</div></td><td>
+	<input id="id_input_text_button_status" type="text" size="40" readonly>
+	</td></tr>
+
+	<tr><td><div>
+	<button type="button" id="id_button_show_message">
+Show
+	</button>
+Message:
+	</div></td><td>
+	<input id="id_input_text_message" type="text" size="40">
+	</td></tr>
+
+	<tr><td><div>
+	<button type="button" id="id_button_send_request">
+Send
+	</button>
+Request:
+	</div></td><td>
+	<input id="id_input_text_request" type="text" size="40">
+	</td></tr>
+
+	<tr><td><div>
+Response:
+	</div></td><td>
+	<input id="id_input_text_response" type="text" size="40" readonly>
+	</td></tr>
+
 	</table>
 
-<button type="button" id="id_button_connect">
-	Connect
-	</button>
+	<script src="main.js"></script>
 
-<button type="button" id="id_button_disconnect">
-	Disconnect
-	</button>
-
-<button type="button" id="id_button_say_hello">
-	Say Hello
-	</button>
-
-<script src="main.js">
-	</script>
-	</body>
-	</html>
+	</body></html>
