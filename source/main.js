@@ -31,15 +31,15 @@
 //	micro:bit Bluetooth Profile
 // ------------------------------------------------------------
 
-/**	@namespace	MicroBit
-	@description
-		micro:bit Bluetooth Profile
+/**
+	micro:bit Bluetooth Profile
+	@namespace	MicroBit
 */
 const MicroBit = {
-	/**	@namespace	DeviceInformation
+	/**
+		micro:bit Bluetooth Device Information service
+		@namespace	DeviceInformation
 		@memberof	MicroBit
-		@description
-			micro:bit Bluetooth Device Information service
 	*/
 	DeviceInformation: {
 		/**
@@ -101,10 +101,10 @@ const MicroBit = {
 		kFirmwareRevisionString: '00002a26-0000-1000-8000-00805f9b34fb',
 	},
 
-	/**	@namespace	ButtonService
+	/**
+		micro:bit Bluetooth Button Service
+		@namespace	ButtonService
 		@memberof	MicroBit
-		@description
-			micro:bit Bluetooth Button Service
 	*/
 	ButtonService: {
 		/**
@@ -149,10 +149,10 @@ const MicroBit = {
 		kButtonBState: 'e95dda91-251d-470a-a062-fa1922dfa9a8'
 	},
 
-	/**	@namespace	LedService
+	/**
+		micro:bit Bluetooth LED Service
+		@namespace	LedService
 		@memberof	MicroBit
-		@description
-			micro:bit Bluetooth LED Service
 	*/
 	LedService: {
 		/**
@@ -222,10 +222,10 @@ Octet 4, LED Row 5: bit4 bit3 bit2 bit1 bit0 </pre>
 		kScrollingDelay: 'e95d0d2d-251d-470a-a062-fa1922dfa9a8'
 	},
 
-	/**	@namespace	UartService
+	/**
+		micro:bit Bluetooth UART Service
+		@namespace	UartService
 		@memberof	MicroBit
-		@description
-			micro:bit Bluetooth UART Service
 	*/
 	UartService: {
 		/**
@@ -549,7 +549,9 @@ class BtCharacteristic {
 	}
 
 	/**
-		Request to read data. {@link BtCharacteristic#receiver} is called when the data is ready
+		Request to read data
+		<br><br>
+		{@link BtCharacteristic#receiver} is called when the data is ready
 	*/
 	readData() {
 		this.target.readValue().then(data => {	// data: ArrayBuffer
@@ -560,7 +562,9 @@ class BtCharacteristic {
 	}
 
 	/**
-		Request to read text. {@link BtCharacteristic#receiver} is called when the text is ready
+		Request to read text
+		<br><br>
+		{@link BtCharacteristic#receiver} is called when the text is ready
 	*/
 	readText() {
 		this.target.readValue().then(data => {	// data: ArrayBuffer
@@ -573,14 +577,14 @@ class BtCharacteristic {
 	}
 
 	/**
-		Write data.
+		Write data
 	*/
 	writeData(data) {	// data: ArrayBuffer
 		this.target.writeValue(data);
 	}
 
 	/**
-		Write text.
+		Write text
 	*/
 	writeText(text) {	// text: String
 		let length = text.length;
@@ -596,57 +600,68 @@ class BtCharacteristic {
 // ------------------------------------------------------------
 
 /**
-	The global {@link Button} obejct for Connect button.
+	The global {@link Button} obejct for Connect button
+	@var	{Button}
 */
 let gConnectButton		= new Button('id_button_connect');
 
 /**
-	The global {@link Button} obejct for Disconnect button.
+	The global {@link Button} obejct for Disconnect button
+	@var	{Button}
 */
 let gDisconnectButton	= new Button('id_button_disconnect');
 
 /**
-	The global {@link Button} obejct for Show Message button.
+	The global {@link Button} obejct for Show Message button
+	@var	{Button}
 */
 let gShowMessageButton	= new Button('id_button_show_message');
 
 /**
-	The global {@link Button} obejct for Send Request button.
+	The global {@link Button} obejct for Send Request button
+	@var	{Button}
 */
 let gSendRequestButton	= new Button('id_button_send_request');
 
 /**
-	The global {@link TextArea} obejct for Conection Status field.
+	The global {@link TextArea} obejct for Conection Status field
+	@var	{TextArea}
 */
 let gConnectionStatusTextArea	= new TextArea('id_input_text_connection_status');
 
 /**
-	The global {@link TextArea} obejct for Model Number field.
+	The global {@link TextArea} obejct for Model Number field
+	@var	{TextArea}
 */
 let gModelNumberTextArea		= new TextArea('id_input_text_model_number');
 
 /**
-	The global {@link TextArea} obejct for Firmware Revision field.
+	The global {@link TextArea} obejct for Firmware Revision field
+	@var	{TextArea}
 */
 let gFirmwareRevisionTextArea	= new TextArea('id_input_text_firmware_revision');
 
 /**
-	The global {@link TextArea} obejct for Button Status field.
+	The global {@link TextArea} obejct for Button Status field
+	@var	{TextArea}
 */
 let gButtonStatusTextArea		= new TextArea('id_input_text_button_status');
 
 /**
-	The global {@link TextArea} obejct for Message field.
+	The global {@link TextArea} obejct for Message field
+	@var	{TextArea}
 */
 let gMessageTextArea			= new TextArea('id_input_text_message');
 
 /**
-	The global {@link TextArea} obejct for Request field.
+	The global {@link TextArea} obejct for Request field
+	@var	{TextArea}
 */
 let gRequesTextArea				= new TextArea('id_input_text_request');
 
 /**
-	The global {@link TextArea} obejct for Response field.
+	The global {@link TextArea} obejct for Response field
+	@var	{TextArea}
 */
 let gResponseTextArea			= new TextArea('id_input_text_response');
 
@@ -655,24 +670,31 @@ let gResponseTextArea			= new TextArea('id_input_text_response');
 // ------------------------------------------------------------
 
 /**
-	The global `BluetoothDevice` obejct for the connected Bluetooth device.
+	The global `BluetoothDevice` obejct for the connected Bluetooth device
+	@var	{BluetoothDevice}
 */
 let gDevice = null;
 
 /**
-	The global {@link BtServer} obejct for the connected Bluetooth device.
+	The global {@link BtServer} obejct for the connected Bluetooth device
+	@var	{BtServer}
 */
 let gBtServer = null;
 
 /**
-	Bluetooth device filter.
+	Bluetooth device filter
+	@namespace	sBtDeviceFilter
 */
 const sBtDeviceFilter = {
+	/**
+		Device name prefix
+	*/
 	namePrefix: 'BBC micro:bit'	// e.g., 'BBC micro:bit [vagip]'
 };
 
 /**
-	The list of Bluetooth service uuid.
+	The list of Bluetooth service uuid
+	@var	{Array(UUID)}
 */
 const sBtServiceUuidList = [
 	MicroBit.DeviceInformation.kService,
@@ -682,7 +704,7 @@ const sBtServiceUuidList = [
 ];
 
 /**
-	The list of Bluetooth characteristic uuid.
+	The list of Bluetooth characteristic uuid for each service
 	<br><br>
 	Note that `kSerialNumberString` is blocked with the following error.
 	<br>
@@ -691,6 +713,7 @@ const sBtServiceUuidList = [
 	See also
 	<br>
 	- {@link https://goo.gl/4NeimX}
+	@var	{Array(Array(UUID))}
 */
 const sBtCharacteristicUuidList = [
 	[
@@ -715,7 +738,11 @@ const sBtCharacteristicUuidList = [
 
 // ------------------------------------------------------------
 
-const kScrollingDelayInMilliseconds = 100;	// 100;
+/**
+	Scrolling Delay In Milliseconds
+	@var	{Number}
+*/
+const kScrollingDelayInMilliseconds = 100;
 
 // ------------------------------------------------------------
 //	Window events
