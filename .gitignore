@@ -1,4 +1,5 @@
 # https://git-scm.com/docs/gitignore
 
-.brackets.json
 .DS_Store
+.brackets.json
+jsdoc
