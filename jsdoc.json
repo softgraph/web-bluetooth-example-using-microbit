@@ -1,0 +1,10 @@
+{
+	"opts": {
+		"destination": "jsdoc"
+	},
+	"source": {
+		"include": [
+			"source"
+		]
+	}
+}

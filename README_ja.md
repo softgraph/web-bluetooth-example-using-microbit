@@ -98,6 +98,14 @@
 1. 接続が成功すると、ブラウザの `Connection Status` フィールドに `Connected` が表示される。またデバイスにはチェックマークのアイコンが表示される。
 1. デバイスで A または B ボタンを押す。状態の変化がデバイスから通知され、ブラウザの `Button Status` フィールドに表示される。
 
+### ドキュメント
+
+JavaScript 部分のドキュメントを生成するには、プロジェクトルートの `jsdoc.json` を使って次のように [JSDoc (github.com)](https://github.com/jsdoc/jsdoc) を実行してください。JSDoc 3 以上が必要です。
+```Console
+$ jsdoc -c jsdoc.json
+$ open jsdoc/index.html
+```
+
 ## 参照
 
 ### Bluetooth on micro:bit

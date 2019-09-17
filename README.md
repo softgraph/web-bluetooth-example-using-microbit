@@ -98,6 +98,14 @@
 1. When connection is established, `Connection Status` field on the browser shows `Connected`. Also, the device shows a yes (checkmark) icon.
 1. Press button A or B on the device. State changes are reported from the device and shown on `Button Status` field on the browser.
 
+### Documentation
+
+To generate the documentation of JavaScript part, run [JSDoc (github.com)](https://github.com/jsdoc/jsdoc) as below with `jsdoc.json` file in the project root. JSDoc 3 or higher is required.
+```Console
+$ jsdoc -c jsdoc.json
+$ open jsdoc/index.html
+```
+
 ## References
 
 ### Bluetooth on micro:bit
