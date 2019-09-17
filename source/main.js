@@ -672,7 +672,7 @@ const sBtDeviceFilter = {
 };
 
 /**
-	Bluetooth service uuid list.
+	The list of Bluetooth service uuid.
 */
 const sBtServiceUuidList = [
 	MicroBit.DeviceInformation.kService,
@@ -682,7 +682,7 @@ const sBtServiceUuidList = [
 ];
 
 /**
-	Bluetooth characteristic uuid list.
+	The list of Bluetooth characteristic uuid.
 	<br><br>
 	Note that `kSerialNumberString` is blocked with the following error.
 	<br>
