@@ -9,7 +9,6 @@
 // ------------------------------------------------------------
 
 /**	@file
-	@description
 		Main implementation on the browser side for the Web Bluetooth example using BBC micro:bit.
 		The Bluetooth communication used in this example is defined by micro:bit Bluetooth Profile.
 	@author
@@ -290,17 +289,18 @@ class TextArea {
 		@param {String} id - a id string for a `&lt;input type="text">` or `&lt;textarea>` element
 	*/
 	constructor(id) {
-		/**	@member {String}
+		/**	@member {String} - the id of the element
 		*/
 		this.id = id;
-		/**	@member {Element}
+
+		/**	@member {Element} - the target `Element` (`HTMLInputElement` or HTMLTextAreaElement`)
 		*/
 		this.target = null;
 	}
 
 	/**
-		set text
-		@param {String} text
+		(set/get) text of the element
+		@type {String}
 	*/
 	set text(newValue) {
 		if(!this.target) {
@@ -309,10 +309,6 @@ class TextArea {
 		this.target.value = newValue;
 	}
 
-	/**
-		get text
-		@return {String}
-	*/
 	get text() {
 		if(!this.target) {
 			this.target = document.getElementById(this.id);
@@ -323,7 +319,8 @@ class TextArea {
 
 /**	@classdesc
 		A {@link Button} obejct represents a html element of `&lt;button>`.
-		The object can handle events of type `click`.
+		<br>
+		The class can handle events of type `click`.
 */
 class Button {
 	/**
@@ -331,16 +328,18 @@ class Button {
 		@param {String} id - a id string for a `&lt;button>` element
 	*/
 	constructor(id) {
-		/**	@member {String}
+		/**	@member {String} - the id of the element
 		*/
 		this.id = id;
-		/**	@member {Element}
+
+		/**	@member {Element} - the target `Element` (`HTMLButtonElement`)
 		*/
 		this.target = null;
 	}
 
 	/**
-		@param {function(Event)} listener
+		Add click event listener
+		@param {function(Event)} listener - a click event listener
 	*/
 	addClickEventListener(listener) {
 		if(!this.target) {
@@ -351,43 +350,43 @@ class Button {
 }
 
 // ------------------------------------------------------------
-//	Bluetooth Framework
+//	Bluetooth GATT Framework
 // ------------------------------------------------------------
 
 /**	@classdesc
-		A `BtServer` obejct represents a GATT server on a remote Bluetooth device.
+		A {@link BtgServer} obejct represents a GATT server on a remote Bluetooth device.
 */
-class BtServer {
+class BtgServer {
 	/**
 		constructor
-		@param {BluetoothDevice} device - a Bluetooth Device
-		@param {BluetoothRemoteGATTServer} bluetoothServer - a Bluetooth Server
-		@param {Array(UUID)} serviceUuidList - a list of Service UUID for the Server
+		@param {BluetoothDevice} device - a Bluetooth device
+		@param {BluetoothRemoteGATTServer} server - a Bluetooth GATT server of the device
+		@param {Array(UUID)} serviceUuidList - a list of service UUID for the server
 	*/
-	constructor(bluetoothDevice, bluetoothServer, serviceUuidList) {
-		/**	@member {BluetoothDevice} - the Bluetooth Device
+	constructor(device, server, serviceUuidList) {
+		/**	@member {BluetoothDevice} - the connected Bluetooth device
 		*/
-		this.device = bluetoothDevice;
+		this.device = device;
 
-		/**	@member {BluetoothRemoteGATTServer} - the target Bluetooth Server
+		/**	@member {BluetoothRemoteGATTServer} - the target Bluetooth GATT server of the device
 		*/
-		this.target = bluetoothServer;
+		this.target = server;
 
-		/**	@member {Array(UUID)} - the list of Service UUID for the Server
+		/**	@member {Array(UUID)} - the list of service UUID of the server
 		*/
 		this.uuidList = serviceUuidList;
 
-		/**	@member {Map(UUID, BtService)} - the list of registered BT Service
+		/**	@member {Map(UUID, BtgService)} - the list of registered service of the server
 		*/
-		this.btServices = new Map();
+		this.services = new Map();
 
-		/**	@member {Map(UUID, BtCharacteristic)} - the list of registered BT Characteristic
+		/**	@member {Map(UUID, BtgCharacteristic)} - the list of registered characteristic of the server
 		*/
-		this.btCharacteristics = new Map();
+		this.characteristics = new Map();
 	}
 
 	/**
-		Get Primary Bluetooth Services from the target server
+		Get primary services from the target Bluetooth GATT server
 		@returns {Array(BluetoothGATTService)}
 	*/
 	getPrimaryServices() {
@@ -395,83 +394,83 @@ class BtServer {
 	}
 
 	/**
-		Get Bluetooth Characteristics from the target services
+		Get characteristics for all primary services from the target Bluetooth GATT server
 		@returns {Array(BluetoothGATTCharacteristic)}
 	*/
 	getCharacteristics() {
-		return this.uuidList.flatMap(x => this.btServices.get(x).getCharacteristics());
+		return this.uuidList.flatMap(x => this.services.get(x).getCharacteristics());
 	}
 
 	/**
-		Register a BT Service
+		Register a Bluetooth GATT service
 		@param {UUID} uuid - a UUID
-		@param {BtService} btService - a BT Service
+		@param {BtgService} btService - a Bluetooth GATT service for the UUID
 	*/
-	registerBtService(uuid, btService) {
-		this.btServices.set(uuid, btService);
+	registerService(uuid, btService) {
+		this.services.set(uuid, btService);
 	}
 
 	/**
-		Get a registered BT Service for a UUID
+		Get a registered Bluetooth GATT service for a UUID
 		@param {UUID} uuid - a UUID
-		@returns {BtService}
+		@returns {BtgService}
 	*/
-	getBtService(uuid) {
-		return this.btServices.get(uuid);
+	getService(uuid) {
+		return this.services.get(uuid);
 	}
 
 	/**
-		Register a BT Characteristic
+		Register a Bluetooth GATT characteristic
 		@param {UUID} uuid - a UUID
-		@param {BtCharacteristic} btCharacteristic - a BT Characteristic
+		@param {BtgCharacteristic} characteristic - a Bluetooth GATT characteristic for the UUID
 	*/
-	registerBtCharacteristic(uuid, btCharacteristic) {
-		this.btCharacteristics.set(uuid, btCharacteristic);
+	registerCharacteristic(uuid, characteristic) {
+		this.characteristics.set(uuid, characteristic);
 	}
 
 	/**
-		Get a registered BT Characteristic for a UUID
+		Get a registered Bluetooth GATT characteristic for a UUID
 		@param {UUID} uuid - a UUID
-		@returns {BtCharacteristic}
+		@returns {BtgCharacteristic}
 	*/
-	getBtCharacteristic(uuid) {
-		return this.btCharacteristics.get(uuid);
+	getCharacteristic(uuid) {
+		return this.characteristics.get(uuid);
 	}
 }
 
 /**	@classdesc
-		A `BtService` obejct represents a GATT service on a remote Bluetooth device.
+		A {@link BtgService} obejct represents a GATT service on a remote Bluetooth device.
 */
-class BtService {
+class BtgService {
 	/**
-		@param {BtServer} btServer - a BT Server
-		@param {Array(BluetoothGATTService)} bluetoothServices - a List of Bluetooth Service for the server
-		@param {Array(Array(UUID))} characteristicUuidLists - a List of Characteristic UUID List for the server
+		@param {BtgServer} server - a Bluetooth GATT server
+		@param {Array(BluetoothGATTService)} services - a List of Bluetooth GATT service for the server
+		@param {Array(Array(UUID))} characteristicUuidLists - a List of characteristic UUID List for the server
 	*/
-	static registerServices(btServer, bluetoothServices, characteristicUuidLists) {
+	static registerServices(server, services, characteristicUuidLists) {
 		let i = 0;
-		let bluetoothService;
-		for (bluetoothService of bluetoothServices) {
-			// create an object and register it to the btServer.
-			new BtService(btServer, bluetoothService, characteristicUuidLists[i++]);
+		let service;
+		for (service of services) {
+			// create an object and register it to the server.
+			new BtgService(server, service, characteristicUuidLists[i++]);
 		}
 	}
 	/**
 		constructor
-		@param {BtServer} btServer - a BT Server
-		@param {BluetoothGATTService} bluetoothService - a Bluetooth Service
-		@param {Array(UUID)} characteristicUuidList - a List of Characteristic UUID for the service
+		@param {BtgServer} server - a Bluetooth GATT server
+		@param {BluetoothGATTService} service - a Bluetooth GATT service of the server
+		@param {Array(UUID)} characteristicUuidList - a List of characteristic UUID for the service
 	*/
-	constructor(btServer, bluetoothService, characteristicUuidList) {
-		/**	@member {BtServer} - the BT Server
+	constructor(server, service, characteristicUuidList) {
+		/**	@member {BtgServer} - the connected Bluetooth GATT server
 		*/
-		this.btServer = btServer;
+		this.server = server;
 
-		/**	@member {BluetoothGATTService} - the target Bluetooth Service
+		/**	@member {BluetoothGATTService} - the target Bluetooth GATT service
 		*/
-		this.target = bluetoothService;
+		this.target = service;
 
-		/**	@member {Array(UUID)} - the list of Characteristic UUID for the service
+		/**	@member {Array(UUID)} - the list of characteristic UUID for the service
 		*/
 		this.uuidList = characteristicUuidList;
 
@@ -482,11 +481,11 @@ class BtService {
 		Initialize the object
 	*/
 	init() {
-		this.btServer.registerBtService(this.target.uuid, this);
+		this.server.registerService(this.target.uuid, this);
 	}
 
 	/**
-		Get Bluetooth Characteristics from the target service
+		Get characteristics from the target service
 		@returns {Array(BluetoothGATTCharacteristic)}
 	*/
 	getCharacteristics() {
@@ -495,36 +494,36 @@ class BtService {
 }
 
 /**	@classdesc
-		A `BtCharacteristic` obejct represents a GATT characteristic on a remote Bluetooth device.
+		A {@link BtgCharacteristic} obejct represents a GATT characteristic on a remote Bluetooth device.
 */
-class BtCharacteristic {
+class BtgCharacteristic {
 	/**
-		@param {BtServer} btServer - a BT Server
-		@param {Array(BluetoothGATTCharacteristic)} bluetoothCharacteristics - a List of Bluetooth Characteristic
+		@param {BtgServer} server - a Bluetooth GATT server
+		@param {Array(BluetoothGATTCharacteristic)} characteristics - a List of Bluetooth GATT characteristic for a service of the server
 	*/
-	static registerCharacteristics(btServer, bluetoothCharacteristics) {
-		let bluetoothCharacteristic;
-		for (bluetoothCharacteristic of bluetoothCharacteristics) {
-			// create an object and register it to the btServer.
-			new BtCharacteristic(btServer, bluetoothCharacteristic);
+	static registerCharacteristics(server, characteristics) {
+		let characteristic;
+		for (characteristic of characteristics) {
+			// create an object and register it to the server.
+			new BtgCharacteristic(server, characteristic);
 		}
 	}
 
 	/**
 		constructor
-		@param {BtServer} btServer - a BT Server
-		@param {BluetoothGATTCharacteristic} bluetoothCharacteristic - a Bluetooth Characteristic
+		@param {BtgServer} server - a Bluetooth GATT server
+		@param {BluetoothGATTCharacteristic} characteristic - a Bluetooth GATT characteristic of the server
 	*/
-	constructor(btServer, bluetoothCharacteristic) {
-		/**	@member {BtServer} - the BT Server
+	constructor(server, characteristic) {
+		/**	@member {BtgServer} - the connected Bluetooth GATT server
 		*/
-		this.btServer = btServer;
+		this.server = server;
 
-		/**	@member {BluetoothGATTCharacteristic} - the target Bluetooth Characteristic
+		/**	@member {BluetoothGATTCharacteristic} - the target Bluetooth GATT characteristic of the server
 		*/
-		this.target = bluetoothCharacteristic;
+		this.target = characteristic;
 
-		/**	@member {function(ArrayBuffer)|function(String)} - the receiver function for {@link BtCharacteristic#readData} or {@link BtCharacteristic#readText}
+		/**	@member {function(ArrayBuffer)|function(String)} - the receiver function for {@link BtgCharacteristic#readData} or {@link BtgCharacteristic#readText}
 		*/
 		this.receiver = null;
 
@@ -535,12 +534,12 @@ class BtCharacteristic {
 		Initialize the object
 	*/
 	init() {
-		this.btServer.registerBtCharacteristic(this.target.uuid, this);
+		this.server.registerCharacteristic(this.target.uuid, this);
 	}
 
 	/**
-		Add Value Changed Event Listener
-		@param {function(Event)} listener - Value Changed Event Listener
+		Add value changed event listener
+		@param {function(Event)} listener - a value changed event listener
 	*/
 	addValueChangedEventListener(listener) {
 		this.target.startNotifications().then(characteristic => {	// BluetoothRemoteGATTCharacteristic
@@ -551,7 +550,7 @@ class BtCharacteristic {
 	/**
 		Request to read data
 		<br><br>
-		{@link BtCharacteristic#receiver} is called when the data is ready
+		{@link BtgCharacteristic#receiver} is called when the data is ready
 	*/
 	readData() {
 		this.target.readValue().then(data => {	// data: ArrayBuffer
@@ -564,7 +563,7 @@ class BtCharacteristic {
 	/**
 		Request to read text
 		<br><br>
-		{@link BtCharacteristic#receiver} is called when the text is ready
+		{@link BtgCharacteristic#receiver} is called when the text is ready
 	*/
 	readText() {
 		this.target.readValue().then(data => {	// data: ArrayBuffer
@@ -596,93 +595,93 @@ class BtCharacteristic {
 }
 
 // ------------------------------------------------------------
-//	Interface to the html
+//	Global variables for the interface to html elements
 // ------------------------------------------------------------
 
 /**
-	The global {@link Button} obejct for Connect button
+	Connect button
 	@var	{Button}
 */
 let gConnectButton		= new Button('id_button_connect');
 
 /**
-	The global {@link Button} obejct for Disconnect button
+	Disconnect button
 	@var	{Button}
 */
 let gDisconnectButton	= new Button('id_button_disconnect');
 
 /**
-	The global {@link Button} obejct for Show Message button
+	Show Message button
 	@var	{Button}
 */
 let gShowMessageButton	= new Button('id_button_show_message');
 
 /**
-	The global {@link Button} obejct for Send Request button
+	Send Request button
 	@var	{Button}
 */
 let gSendRequestButton	= new Button('id_button_send_request');
 
 /**
-	The global {@link TextArea} obejct for Conection Status field
+	Conection Status field
 	@var	{TextArea}
 */
 let gConnectionStatusTextArea	= new TextArea('id_input_text_connection_status');
 
 /**
-	The global {@link TextArea} obejct for Model Number field
+	Model Number field
 	@var	{TextArea}
 */
 let gModelNumberTextArea		= new TextArea('id_input_text_model_number');
 
 /**
-	The global {@link TextArea} obejct for Firmware Revision field
+	Firmware Revision field
 	@var	{TextArea}
 */
 let gFirmwareRevisionTextArea	= new TextArea('id_input_text_firmware_revision');
 
 /**
-	The global {@link TextArea} obejct for Button Status field
+	Button Status field
 	@var	{TextArea}
 */
 let gButtonStatusTextArea		= new TextArea('id_input_text_button_status');
 
 /**
-	The global {@link TextArea} obejct for Message field
+	Message field
 	@var	{TextArea}
 */
 let gMessageTextArea			= new TextArea('id_input_text_message');
 
 /**
-	The global {@link TextArea} obejct for Request field
+	Request field
 	@var	{TextArea}
 */
 let gRequesTextArea				= new TextArea('id_input_text_request');
 
 /**
-	The global {@link TextArea} obejct for Response field
+	Response field
 	@var	{TextArea}
 */
 let gResponseTextArea			= new TextArea('id_input_text_response');
 
 // ------------------------------------------------------------
-//	Interface to the Bluetooth device
+//	Global variables for the interface to a Bluetooth device
 // ------------------------------------------------------------
 
 /**
-	The global `BluetoothDevice` obejct for the connected Bluetooth device
+	The connected Bluetooth device. null if no device is selected.
 	@var	{BluetoothDevice}
 */
-let gDevice = null;
+let gBtDevice = null;
 
 /**
-	The global {@link BtServer} obejct for the connected Bluetooth device
-	@var	{BtServer}
+	The GATT server on the connected Bluetooth device. null if no server is available.
+	@var	{BtgServer}
 */
-let gBtServer = null;
+let gBtgServer = null;
 
 /**
-	Bluetooth device filter
+	The Bluetooth device filter to exclude incompatible devices from the list to choose a device.
 	@namespace	sBtDeviceFilter
 */
 const sBtDeviceFilter = {
@@ -693,10 +692,10 @@ const sBtDeviceFilter = {
 };
 
 /**
-	The list of Bluetooth service uuid
+	The list of Bluetooth service uuid.
 	@var	{Array(UUID)}
 */
-const sBtServiceUuidList = [
+const sBtgServiceUuidList = [
 	MicroBit.DeviceInformation.kService,
 	MicroBit.ButtonService.kService,
 	MicroBit.LedService.kService,
@@ -704,9 +703,9 @@ const sBtServiceUuidList = [
 ];
 
 /**
-	The list of Bluetooth characteristic uuid for each service
+	The list of Bluetooth characteristic uuid for each service.
 	<br><br>
-	Note that `kSerialNumberString` is blocked with the following error.
+	Note that the access to {@limnk MicroBit.DeviceInformation.kSerialNumberString} is blocked with the following error.
 	<br>
 	- SecurityError: getCharacteristic(s) called with blocklisted UUID.
 	<br>
@@ -715,7 +714,7 @@ const sBtServiceUuidList = [
 	- {@link https://goo.gl/4NeimX}
 	@var	{Array(Array(UUID))}
 */
-const sBtCharacteristicUuidList = [
+const sBtgCharacteristicUuidList = [
 	[
 		MicroBit.DeviceInformation.kModelNumberString,
 	//	MicroBit.DeviceInformation.kSerialNumberString,
@@ -737,15 +736,23 @@ const sBtCharacteristicUuidList = [
 ];
 
 // ------------------------------------------------------------
+//	Constants
+// ------------------------------------------------------------
 
 /**
-	Scrolling Delay In Milliseconds
+	micro:bit LED's scrolling delay in milliseconds.
 	@var	{Number}
 */
-const kScrollingDelayInMilliseconds = 100;
+const kMicroBitLedScrollingDelayInMilliseconds = 100;
 
 // ------------------------------------------------------------
-//	Window events
+//
+//	No JSDoc documentation for the part below
+//
+// ------------------------------------------------------------
+
+// ------------------------------------------------------------
+//	Implementation for window events (No JSDoc)
 // ------------------------------------------------------------
 
 window.onload = onLoadWindow;
@@ -760,13 +767,13 @@ function onLoadWindow() {
 }
 
 function onBeforeUnloadWindow() {
-	if(gDevice && gDevice.gatt.connected) {
-		gDevice.gatt.disconnect();
+	if(gBtDevice && gBtDevice.gatt.connected) {
+		gBtDevice.gatt.disconnect();
 	}
 }
 
 // ------------------------------------------------------------
-//	Bluetooth connection
+//	Implementation for Bluetooth connection
 // ------------------------------------------------------------
 
 function onClickConnectButton() {
@@ -774,24 +781,26 @@ function onClickConnectButton() {
 		alert(`Web Bluetooth is not available on this browser.`);
 		return;
 	}
+
 	gConnectionStatusTextArea.text = 'Connecting...';
 	navigator.bluetooth.requestDevice({
 		filters: [sBtDeviceFilter],
-		optionalServices: sBtServiceUuidList
+		optionalServices: sBtgServiceUuidList
 	}).then(device => {		// device: BluetoothDevice
-		gDevice = device;
+		gBtDevice = device;
 		return device.gatt.connect();
 	}).then(server => {		// server: BluetoothRemoteGATTServer
-		gBtServer = new BtServer(gDevice, server, sBtServiceUuidList);
-		return Promise.all(gBtServer.getPrimaryServices());
+		gBtgServer = new BtgServer(gBtDevice, server, sBtgServiceUuidList);
+		return Promise.all(gBtgServer.getPrimaryServices());
 	}).then(services => {	// services: [ BluetoothGATTService ]
-		BtService.registerServices(gBtServer, services, sBtCharacteristicUuidList);
-		return Promise.all(gBtServer.getCharacteristics());
+		BtgService.registerServices(gBtgServer, services, sBtgCharacteristicUuidList);
+		return Promise.all(gBtgServer.getCharacteristics());
 	}).then(characteristics => {	// characteristics: [ BluetoothGATTCharacteristic ]
-		BtCharacteristic.registerCharacteristics(gBtServer, characteristics);
+		BtgCharacteristic.registerCharacteristics(gBtgServer, characteristics);
 		handleConnected();
 		gConnectionStatusTextArea.text = 'Connected';
 	}).catch(reason => {
+		gConnectionStatusTextArea.text = 'Connection Failed';	// this update is suspended while the alert below is open
 		alert(reason);
 	});
 }
@@ -804,9 +813,9 @@ function handleConnected() {
 }
 
 function onClickDisconnectButton() {
-	if(gDevice && gDevice.gatt.connected) {
-		gDevice.gatt.disconnect();
-		if(gDevice.gatt.connected) {
+	if(gBtDevice && gBtDevice.gatt.connected) {
+		gBtDevice.gatt.disconnect();
+		if(gBtDevice.gatt.connected) {
 			gConnectionStatusTextArea.text = 'Disconnection Failed';
 		}
 		else {
@@ -816,44 +825,44 @@ function onClickDisconnectButton() {
 	else {
 		gConnectionStatusTextArea.text = 'Not Connected';
 	}
-	gDevice = null;
+	gBtDevice = null;
 }
 
 // ------------------------------------------------------------
-//	Device Information Service
+//	Implementation for micro:bit's Device Information Service
 // ------------------------------------------------------------
 
 function retrieveDeviceInformation() {
-	let btCharacteristic = gBtServer.getBtCharacteristic(MicroBit.DeviceInformation.kModelNumberString);
-	if(btCharacteristic) {
-		btCharacteristic.receiver = function (text) {
+	let characteristic = gBtgServer.getCharacteristic(MicroBit.DeviceInformation.kModelNumberString);
+	if(characteristic) {
+		characteristic.receiver = function (text) {
 			gModelNumberTextArea.text = text;
 		};
-		btCharacteristic.readText();
+		characteristic.readText();
 	}
-	btCharacteristic = gBtServer.getBtCharacteristic(MicroBit.DeviceInformation.kFirmwareRevisionString);
-	if(btCharacteristic) {
-		btCharacteristic.receiver = function (text) {
+	characteristic = gBtgServer.getCharacteristic(MicroBit.DeviceInformation.kFirmwareRevisionString);
+	if(characteristic) {
+		characteristic.receiver = function (text) {
 			gFirmwareRevisionTextArea.text = text;
 		};
-		btCharacteristic.readText();
+		characteristic.readText();
 	}
 }
 
 // ------------------------------------------------------------
-//	Button Service
+//	Implementation for micro:bit's Button Service
 // ------------------------------------------------------------
 
 function observeButtons()
 {
-	let btCharacteristic;
-	btCharacteristic = gBtServer.getBtCharacteristic(MicroBit.ButtonService.kButtonAState);
-	if(btCharacteristic) {
-		btCharacteristic.addValueChangedEventListener(handleButtonAStateChanged);
+	let characteristic;
+	characteristic = gBtgServer.getCharacteristic(MicroBit.ButtonService.kButtonAState);
+	if(characteristic) {
+		characteristic.addValueChangedEventListener(handleButtonAStateChanged);
 	}
-	btCharacteristic = gBtServer.getBtCharacteristic(MicroBit.ButtonService.kButtonBState);
-	if(btCharacteristic) {
-		btCharacteristic.addValueChangedEventListener(handleButtonBStateChanged);
+	characteristic = gBtgServer.getCharacteristic(MicroBit.ButtonService.kButtonBState);
+	if(characteristic) {
+		characteristic.addValueChangedEventListener(handleButtonBStateChanged);
 	}
 }
 
@@ -884,33 +893,33 @@ function handleButtonBStateChanged(event) {
 }
 
 // ------------------------------------------------------------
-//	LED Service
+//	Implementation for micro:bit's LED Service
 // ------------------------------------------------------------
 
 function setScrollingDelay() {
-	const btCharacteristic = gBtServer.getBtCharacteristic(MicroBit.LedService.kScrollingDelay);
-	if(!btCharacteristic) {
+	const characteristic = gBtgServer.getCharacteristic(MicroBit.LedService.kScrollingDelay);
+	if(!characteristic) {
 		return;
 	}
 	//	use platform's endianness as
-	//		let data = Uint16Array.of(kScrollingDelayInMilliseconds);
+	//		let data = Uint16Array.of(kMicroBitLedScrollingDelayInMilliseconds);
 	//	or use little endian explicitly
 	let data = new DataView(new ArrayBuffer(2));
-	data.setUint16(0, kScrollingDelayInMilliseconds, true);
-	btCharacteristic.writeData(data);
+	data.setUint16(0, kMicroBitLedScrollingDelayInMilliseconds, true);
+	characteristic.writeData(data);
 }
 
 function onClickShowMessageButton() {
-	const btCharacteristic = gBtServer.getBtCharacteristic(MicroBit.LedService.kLedText);
-	if(!btCharacteristic) {
+	const characteristic = gBtgServer.getCharacteristic(MicroBit.LedService.kLedText);
+	if(!characteristic) {
 		return;
 	}
 	try {
 		const text = gMessageTextArea.text;
 		const length = text.length;
 		if(length > 0) {
-			btCharacteristic.writeText(text);
-			setTimeout(showCheckmark, kScrollingDelayInMilliseconds * 6 * (length + 2));
+			characteristic.writeText(text);
+			setTimeout(showCheckmark, kMicroBitLedScrollingDelayInMilliseconds * 6 * (length + 2));
 		}
 	}
 	catch (reason) {
@@ -919,8 +928,8 @@ function onClickShowMessageButton() {
 }
 
 function showCheckmark() {
-	const btCharacteristic = gBtServer.getBtCharacteristic(MicroBit.LedService.kLedMatrixState);
-	if(!btCharacteristic) {
+	const characteristic = gBtgServer.getCharacteristic(MicroBit.LedService.kLedMatrixState);
+	if(!characteristic) {
 		return;
 	}
 	try {
@@ -931,7 +940,7 @@ function showCheckmark() {
 			0x14,	//	X - X - -
 			0x08	//	- X - - -
 		);
-		btCharacteristic.writeData(data);
+		characteristic.writeData(data);
 	}
 	catch (reason) {
 		alert(reason);
@@ -939,11 +948,11 @@ function showCheckmark() {
 }
 
 // ------------------------------------------------------------
-//	UART Seervice
+//	Implementation for micro:bit's UART Service
 // ------------------------------------------------------------
 
 function onClickSendRequestButton() {
-	const txCharacteristic = gBtServer.getBtCharacteristic(MicroBit.UartService.kRxCharacteristic);
+	const txCharacteristic = gBtgServer.getCharacteristic(MicroBit.UartService.kRxCharacteristic);
 	if(txCharacteristic) {
 		try {
 			/*
@@ -965,9 +974,9 @@ function onClickSendRequestButton() {
 
 function observeUart()
 {
-	let btCharacteristic = gBtServer.getBtCharacteristic(MicroBit.UartService.kTxCharacteristic);
-	if(btCharacteristic) {
-		btCharacteristic.addValueChangedEventListener(handleTxCharacteristicChanged);
+	let characteristic = gBtgServer.getCharacteristic(MicroBit.UartService.kTxCharacteristic);
+	if(characteristic) {
+		characteristic.addValueChangedEventListener(handleTxCharacteristicChanged);
 	}
 }
 
