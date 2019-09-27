@@ -325,13 +325,13 @@ class TextArea {
 		@type	{String}
 	*/
 	get text() {
-		if(!this._target) {
+		if (!this._target) {
 			this._target = document.getElementById(this._id);
 		}
 		return this._target.value;
 	}
 	set text(newValue) {
-		if(!this._target) {
+		if (!this._target) {
 			this._target = document.getElementById(this._id);
 		}
 		this._target.value = newValue;
@@ -362,7 +362,7 @@ class Button {
 		@param	{function(Event)} listener - a click event listener
 	*/
 	addClickEventListener(listener) {
-		if(!this._target) {
+		if (!this._target) {
 			this._target = document.getElementById(this._id);
 		}
 		this._target.addEventListener('click', listener, false);
@@ -470,7 +470,7 @@ class BtgService {
 	static registerServices(server, services, characteristicUuidLists) {
 		let i = 0;
 		let service;
-		for(service of services) {
+		for (service of services) {
 			// create an object and register it to the server.
 			new BtgService(server, service, characteristicUuidLists[i++]);
 		}
@@ -523,7 +523,7 @@ class BtgCharacteristic {
 	*/
 	static registerCharacteristics(server, characteristics) {
 		let characteristic;
-		for(characteristic of characteristics) {
+		for (characteristic of characteristics) {
 			// create an object and register it to the server.
 			new BtgCharacteristic(server, characteristic);
 		}
@@ -604,7 +604,7 @@ class BtgCharacteristic {
 	writeData(data, completionHandler) {
 		this._target.writeValue(data).then(
 			() => {
-				if(completionHandler) {
+				if (completionHandler) {
 					completionHandler();
 				}
 			}
@@ -620,11 +620,11 @@ class BtgCharacteristic {
 	*/
 	writeText(text, completionHandler) {
 		let length = text.length;
-		if(length > 0) {
+		if (length > 0) {
 			const encoder = new TextEncoder();
 			this._target.writeValue(encoder.encode(text)).then(
 				() => {
-					if(completionHandler) {
+					if (completionHandler) {
 						completionHandler();
 					}
 				}
@@ -643,103 +643,103 @@ class BtgCharacteristic {
 	Connect button
 	@var	{Button}
 */
-let gConnectButton				= new Button('id_button_connect');
+let gConnectButton = new Button('id_button_connect');
 
 /**
 	Disconnect button
 	@var	{Button}
 */
-let gDisconnectButton			= new Button('id_button_disconnect');
+let gDisconnectButton = new Button('id_button_disconnect');
 
 /**
 	Clear LED Matrix button
 	@var	{Button}
 */
-let gClearLedMatrixButton		= new Button('id_button_clear_led_matrix');
+let gClearLedMatrixButton = new Button('id_button_clear_led_matrix');
 
 /**
 	Refresh LED Matrix button
 	@var	{Button}
 */
-let gRefreshLedMatrixButton		= new Button('id_button_refresh_led_matrix');
+let gRefreshLedMatrixButton = new Button('id_button_refresh_led_matrix');
 
 /**
 	Show LED Message button
 	@var	{Button}
 */
-let gShowLedMessageButton		= new Button('id_button_show_led_message');
+let gShowLedMessageButton = new Button('id_button_show_led_message');
 
 /**
 	Send UART Request button
 	@var	{Button}
 */
-let gSendUartRequestButton		= new Button('id_button_send_uart_request');
+let gSendUartRequestButton = new Button('id_button_send_uart_request');
 
 /**
 	Start Test Scenario button
 	@var	{Button}
 */
-let gStartTestScenarioButton	= new Button('id_button_start_test_scenario');
+let gStartTestScenarioButton = new Button('id_button_start_test_scenario');
 
 /**
 	Cancel Test Scenario button
 	@var	{Button}
 */
-let gCancelTestScenarioButton	= new Button('id_button_cancel_test_scenario');
+let gCancelTestScenarioButton = new Button('id_button_cancel_test_scenario');
 
 /**
 	Conection Status field
 	@var	{TextArea}
 */
-let gConnectionStatusTextArea	= new TextArea('id_input_text_connection_status');
+let gConnectionStatusTextArea = new TextArea('id_input_text_connection_status');
 
 /**
 	Model Number field
 	@var	{TextArea}
 */
-let gModelNumberTextArea		= new TextArea('id_input_text_model_number');
+let gModelNumberTextArea = new TextArea('id_input_text_model_number');
 
 /**
 	Firmware Revision field
 	@var	{TextArea}
 */
-let gFirmwareRevisionTextArea	= new TextArea('id_input_text_firmware_revision');
+let gFirmwareRevisionTextArea = new TextArea('id_input_text_firmware_revision');
 
 /**
 	Button Status field
 	@var	{TextArea}
 */
-let gButtonStatusTextArea		= new TextArea('id_input_text_button_status');
+let gButtonStatusTextArea = new TextArea('id_input_text_button_status');
 
 /**
 	Led Matrix field
 	@var	{TextArea}
 */
-let gLedMatrixTextArea			= new TextArea('id_textarea_led_matrix');
+let gLedMatrixTextArea = new TextArea('id_textarea_led_matrix');
 
 /**
 	Message field
 	@var	{TextArea}
 */
-let gLedMessageTextArea			= new TextArea('id_input_text_led_message');
+let gLedMessageTextArea = new TextArea('id_input_text_led_message');
 
 /**
 	Request field
 	@var	{TextArea}
 */
-let gUartRequestTextArea		= new TextArea('id_input_text_uart_request');
+let gUartRequestTextArea = new TextArea('id_input_text_uart_request');
 
 /**
 	Response field
 	@var	{TextArea}
 */
-let gUartResponseTextArea		= new TextArea('id_input_text_uart_response');
+let gUartResponseTextArea = new TextArea('id_input_text_uart_response');
 
 /**
 	Response field
 	@var	{TextArea}
 */
-let gTestStepTextArea			= new TextArea('id_input_text_test_step');
+let gTestStepTextArea = new TextArea('id_input_text_test_step');
 
 // ------------------------------------------------------------
 //	Global variables for the interface to a Bluetooth device
@@ -863,7 +863,7 @@ function onLoadWindow() {
 	On Before Unload Window
 */
 function onBeforeUnloadWindow() {
-	if(gBtDevice && gBtDevice.gatt.connected) {
+	if (gBtDevice && gBtDevice.gatt.connected) {
 		gBtDevice.gatt.disconnect();
 	}
 }
@@ -924,9 +924,9 @@ function onClickConnectButton() {
 	On Click Disconnect Button
 */
 function onClickDisconnectButton() {
-	if(gBtDevice && gBtDevice.gatt.connected) {
+	if (gBtDevice && gBtDevice.gatt.connected) {
 		gBtDevice.gatt.disconnect();
-		if(gBtDevice.gatt.connected) {
+		if (gBtDevice.gatt.connected) {
 			gConnectionStatusTextArea.text = 'Disconnection Failed';
 		}
 		else {
@@ -948,13 +948,13 @@ function onClickDisconnectButton() {
 */
 function retrieveDeviceInformation() {
 	let characteristic = gBtgServer.getCharacteristic(MicroBit.DeviceInformation.kModelNumberString);
-	if(characteristic) {
+	if (characteristic) {
 		characteristic.readText(
 			text => gModelNumberTextArea.text = text
 		);
 	}
 	characteristic = gBtgServer.getCharacteristic(MicroBit.DeviceInformation.kFirmwareRevisionString);
-	if(characteristic) {
+	if (characteristic) {
 		characteristic.readText(
 			text => gFirmwareRevisionTextArea.text = text
 		);
@@ -968,18 +968,17 @@ function retrieveDeviceInformation() {
 /**
 	Observe Buttons
 */
-function observeButtons()
-{
+function observeButtons() {
 	let characteristic;
 	characteristic = gBtgServer.getCharacteristic(MicroBit.ButtonService.kButtonAState);
-	if(characteristic) {
+	if (characteristic) {
 		characteristic.addValueChangedEventListener(
 			event => {
 				let value = event.target.value.getUint8(0);
-				if(value == 1) {
+				if (value == 1) {
 					gButtonStatusTextArea.text = 'Button A Pressed';
 				}
-				else if(value == 2) {
+				else if (value == 2) {
 					gButtonStatusTextArea.text = 'Button A Long Pressed';
 				}
 				else {
@@ -989,14 +988,14 @@ function observeButtons()
 		);
 	}
 	characteristic = gBtgServer.getCharacteristic(MicroBit.ButtonService.kButtonBState);
-	if(characteristic) {
+	if (characteristic) {
 		characteristic.addValueChangedEventListener(
 			event => {
 				let value = event.target.value.getUint8(0);
-				if(value == 1) {
+				if (value == 1) {
 					gButtonStatusTextArea.text = 'Button B Pressed';
 				}
-				else if(value == 2) {
+				else if (value == 2) {
 					gButtonStatusTextArea.text = 'Button B Long Pressed';
 				}
 				else {
@@ -1060,16 +1059,16 @@ function areTypedArraysEqual(a, b) {
 */
 function retrieveLedMatrix() {
 	const characteristic = gBtgServer.getCharacteristic(MicroBit.LedService.kLedMatrixState);
-	if(characteristic) {
+	if (characteristic) {
 		characteristic.readData(
 			data => {
-				if(!data || data.byteLength != 5) {
+				if (!data || data.byteLength != 5) {
 					return;
 				}
 				let text = '';
 				let i;
-				for(i = 0; i < 5; i++) {
-					if(text != '') {
+				for (i = 0; i < 5; i++) {
+					if (text != '') {
 						text += '\n';
 					}
 					let row = data.getUint8(i);
@@ -1098,7 +1097,7 @@ function charForLedPixel(value) {
 */
 function setScrollingDelay() {
 	const characteristic = gBtgServer.getCharacteristic(MicroBit.LedService.kScrollingDelay);
-	if(!characteristic) {
+	if (!characteristic) {
 		return;
 	}
 	//	use platform's endianness as
@@ -1115,7 +1114,7 @@ function setScrollingDelay() {
 */
 function showLedMatrix(data) {
 	const characteristic = gBtgServer.getCharacteristic(MicroBit.LedService.kLedMatrixState);
-	if(!characteristic) {
+	if (!characteristic) {
 		return;
 	}
 	try {
@@ -1124,7 +1123,7 @@ function showLedMatrix(data) {
 			() => retrieveLedMatrix()
 		);
 	}
-	catch(error) {
+	catch (error) {
 		alert(error);
 	}
 }
@@ -1148,13 +1147,13 @@ function onClickRefreshLedMatrixButton() {
 */
 function onClickShowLedMessageButton() {
 	const characteristic = gBtgServer.getCharacteristic(MicroBit.LedService.kLedText);
-	if(!characteristic) {
+	if (!characteristic) {
 		return;
 	}
 	try {
 		const text = gLedMessageTextArea.text;
 		const length = text.length;
-		if(length > 0) {
+		if (length > 0) {
 			characteristic.writeText(text);
 			setTimeout(
 				() => showLedMatrix(sLedMatrixCheckMark),
@@ -1162,7 +1161,7 @@ function onClickShowLedMessageButton() {
 			);
 		}
 	}
-	catch(error) {
+	catch (error) {
 		alert(error);
 	}
 }
@@ -1174,10 +1173,9 @@ function onClickShowLedMessageButton() {
 /**
 	Observe UART
 */
-function observeUart()
-{
+function observeUart() {
 	const characteristic = gBtgServer.getCharacteristic(MicroBit.UartService.kTxCharacteristic);
-	if(characteristic) {
+	if (characteristic) {
 		characteristic.addValueChangedEventListener(
 			event => {
 				const data = event.target.value;
@@ -1195,7 +1193,7 @@ function observeUart()
 */
 function onClickSendUartRequestButton() {
 	const characteristic = gBtgServer.getCharacteristic(MicroBit.UartService.kRxCharacteristic);
-	if(characteristic) {
+	if (characteristic) {
 		try {
 			/*
 			let data = Uint8Array.of(0x4a, 0x42, 0x3A);
@@ -1203,12 +1201,12 @@ function onClickSendUartRequestButton() {
 			*/
 			let text = gUartRequestTextArea.text;
 			const length = text.length;
-			if(length > 0) {
+			if (length > 0) {
 				text += '\n';
 				characteristic.writeText(text);
 			}
 		}
-		catch(error) {
+		catch (error) {
 			alert(error);
 		}
 	}
@@ -1286,7 +1284,7 @@ let gTestScenarioTimer = "off";
 	On Click Start Test Scenario Button
 */
 function onClickStartTestScenarioButton() {
-	if(gTestStep < 0) {
+	if (gTestStep < 0) {
 		startTestScenario();
 	}
 }
@@ -1295,7 +1293,7 @@ function onClickStartTestScenarioButton() {
 	On Click Cancel Test Scenario Button
 */
 function onClickCancelTestScenarioButton() {
-	if(0 <= gTestStep) {
+	if (0 <= gTestStep) {
 		gTestStepTextArea.text = 'Canceled.';
 		stopTestScenario();
 	}
@@ -1330,7 +1328,7 @@ function startIntervalTimer() {
 	Cancel Interval Timer
 */
 function cancelIntervalTimer() {
-	if(gTestScenarioTimer != "off") {
+	if (gTestScenarioTimer != "off") {
 		clearInterval(gTestScenarioTimer);
 		gTestScenarioTimer = "off";
 	}
@@ -1340,8 +1338,8 @@ function cancelIntervalTimer() {
 	Maintain Test Scenario
 */
 function maintainTestScenario() {
-	if((0 <= gTestStep) && (gTestStep < sTestScenario.length)) {
-		if(!(sTestScenario[gTestStep].condition)()) {
+	if ((0 <= gTestStep) && (gTestStep < sTestScenario.length)) {
+		if (!(sTestScenario[gTestStep].condition)()) {
 			// wait for the condition
 			return;
 		}
@@ -1351,7 +1349,7 @@ function maintainTestScenario() {
 			(gTestStep + 1).toString() + '. ' + sTestScenario[gTestStep].guide;
 
 		gTestStep++;
-		if(gTestStep < sTestScenario.length) {
+		if (gTestStep < sTestScenario.length) {
 			// go to the next step
 			return;
 		}
