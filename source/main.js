@@ -380,7 +380,7 @@ class BtgServer {
 	/**
 		constructor
 		@param	{BluetoothDevice} device - a Bluetooth device
-		@param	{BluetoothRemoteGATTServer} server - a Bluetooth GATT server of the device
+		@param	{BluetoothRemoteGATTServer} server - a Bluetooth Remote GATT Server of the device
 		@param	{Array(UUID)} serviceUuidList - a list of service UUID for the server
 	*/
 	constructor(device, server, serviceUuidList) {
@@ -388,7 +388,7 @@ class BtgServer {
 		*/
 		this._device = device;
 
-		/**	@member	{BluetoothRemoteGATTServer} - the target Bluetooth GATT server of the device
+		/**	@member	{BluetoothRemoteGATTServer} - the target Bluetooth Remote GATT Server of the device
 		*/
 		this._target = server;
 
@@ -406,7 +406,7 @@ class BtgServer {
 	}
 
 	/**
-		Get primary services from the target Bluetooth GATT server
+		Get primary Bluetooth Remote GATT Services from the target server
 		@returns	{Array(BluetoothRemoteGATTService)}
 	*/
 	getPrimaryServices() {
@@ -414,7 +414,7 @@ class BtgServer {
 	}
 
 	/**
-		Get characteristics for all primary services from the target Bluetooth GATT server
+		Get Bluetooth Remote GATT Characteristics for all primary services from the target server
 		@returns	{Array(BluetoothRemoteGATTCharacteristic)}
 	*/
 	getCharacteristics() {
@@ -422,16 +422,16 @@ class BtgServer {
 	}
 
 	/**
-		Register a Bluetooth GATT service
+		Register a Bluetooth GATT Service
 		@param	{UUID} uuid - a UUID
-		@param	{BtgService} btService - a Bluetooth GATT service for the UUID
+		@param	{BtgService} btService - a Bluetooth GATT Service for the UUID
 	*/
 	registerService(uuid, btService) {
 		this._services.set(uuid, btService);
 	}
 
 	/**
-		Get a registered Bluetooth GATT service for a UUID
+		Get a registered Bluetooth GATT Service for a UUID
 		@param	{UUID} uuid - a UUID
 		@returns	{BtgService}
 	*/
@@ -440,16 +440,16 @@ class BtgServer {
 	}
 
 	/**
-		Register a Bluetooth GATT characteristic
+		Register a Bluetooth GATT Characteristic
 		@param	{UUID} uuid - a UUID
-		@param	{BtgCharacteristic} characteristic - a Bluetooth GATT characteristic for the UUID
+		@param	{BtgCharacteristic} characteristic - a Bluetooth GATT Characteristic for the UUID
 	*/
 	registerCharacteristic(uuid, characteristic) {
 		this._characteristics.set(uuid, characteristic);
 	}
 
 	/**
-		Get a registered Bluetooth GATT characteristic for a UUID
+		Get a registered Bluetooth GATT Characteristic for a UUID
 		@param	{UUID} uuid - a UUID
 		@returns	{BtgCharacteristic}
 	*/
@@ -463,8 +463,8 @@ class BtgServer {
 */
 class BtgService {
 	/**
-		@param	{BtgServer} server - a Bluetooth GATT server
-		@param	{Array(BluetoothRemoteGATTService)} services - a List of Bluetooth GATT service for the server
+		@param	{BtgServer} server - a Bluetooth GATT Server
+		@param	{Array(BluetoothRemoteGATTService)} services - a List of Bluetooth Remote GATT Service for the server
 		@param	{Array(Array(UUID))} characteristicUuidLists - a List of characteristic UUID List for the server
 	*/
 	static registerServices(server, services, characteristicUuidLists) {
@@ -477,16 +477,16 @@ class BtgService {
 	}
 	/**
 		constructor
-		@param	{BtgServer} server - a Bluetooth GATT server
-		@param	{BluetoothRemoteGATTService} service - a Bluetooth GATT service of the server
+		@param	{BtgServer} server - a Bluetooth GATT Server
+		@param	{BluetoothRemoteGATTService} service - a Bluetooth Remote GATT Service of the server
 		@param	{Array(UUID)} characteristicUuidList - a List of characteristic UUID for the service
 	*/
 	constructor(server, service, characteristicUuidList) {
-		/**	@member	{BtgServer} - the connected Bluetooth GATT server
+		/**	@member	{BtgServer} - the connected Bluetooth GATT Server
 		*/
 		this._server = server;
 
-		/**	@member	{BluetoothRemoteGATTService} - the target Bluetooth GATT service
+		/**	@member	{BluetoothRemoteGATTService} - the target Bluetooth Remote GATT Service
 		*/
 		this._target = service;
 
@@ -505,7 +505,7 @@ class BtgService {
 	}
 
 	/**
-		Get characteristics from the target service
+		Get Bluetooth Remote GATT Characteristics from the target service
 		@returns	{Array(BluetoothRemoteGATTCharacteristic)}
 	*/
 	getCharacteristics() {
@@ -518,8 +518,8 @@ class BtgService {
 */
 class BtgCharacteristic {
 	/**
-		@param	{BtgServer} server - a Bluetooth GATT server
-		@param	{Array(BluetoothRemoteGATTCharacteristic)} characteristics - a List of Bluetooth GATT characteristic for a service of the server
+		@param	{BtgServer} server - a Bluetooth GATT Server
+		@param	{Array(BluetoothRemoteGATTCharacteristic)} characteristics - a List of Bluetooth Remote GATT Characteristic for a service of the server
 	*/
 	static registerCharacteristics(server, characteristics) {
 		let characteristic;
@@ -531,15 +531,15 @@ class BtgCharacteristic {
 
 	/**
 		constructor
-		@param	{BtgServer} server - a Bluetooth GATT server
-		@param	{BluetoothRemoteGATTCharacteristic} characteristic - a Bluetooth GATT characteristic of the server
+		@param	{BtgServer} server - a Bluetooth GATT Server
+		@param	{BluetoothRemoteGATTCharacteristic} characteristic - a Bluetooth Remote GATT Characteristic of the server
 	*/
 	constructor(server, characteristic) {
-		/**	@member	{BtgServer} - the connected Bluetooth GATT server
+		/**	@member	{BtgServer} - the connected Bluetooth GATT Server
 		*/
 		this._server = server;
 
-		/**	@member	{BluetoothRemoteGATTCharacteristic} - the target Bluetooth GATT characteristic of the server
+		/**	@member	{BluetoothRemoteGATTCharacteristic} - the target Bluetooth Remote GATT Characteristic of the server
 		*/
 		this._target = characteristic;
 
