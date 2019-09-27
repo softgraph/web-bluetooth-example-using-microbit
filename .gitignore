@@ -3,5 +3,6 @@
 .DS_Store
 
 /.brackets.json
+/.eslintrc.json
 /jsdoc/
 /vs.code-workspace
