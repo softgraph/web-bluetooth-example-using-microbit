@@ -62,25 +62,25 @@
 1. Switch editor mode from `Blocks` to `JavaScript` and replace the existing code with the following.
 
 	```javascript
-bluetooth.onBluetoothConnected(function () {
-    basic.showIcon(IconNames.Yes)
-})
-bluetooth.onBluetoothDisconnected(function () {
-    basic.showIcon(IconNames.Square)
-})
-bluetooth.onUartDataReceived(serial.delimiters(Delimiters.NewLine), function () {
-    str = bluetooth.uartReadUntil(serial.delimiters(Delimiters.NewLine))
-    basic.showIcon(IconNames.Heart)
-    basic.pause(200)
-    basic.showIcon(IconNames.Yes)
-    bluetooth.uartWriteString("Received " + str + "\n")
-})
-let str = ""
-bluetooth.startButtonService()
-bluetooth.startLEDService()
-bluetooth.startUartService()
-basic.showIcon(IconNames.Square)
-```
+	bluetooth.onBluetoothConnected(function () {
+	    basic.showIcon(IconNames.Yes)
+	})
+	bluetooth.onBluetoothDisconnected(function () {
+	    basic.showIcon(IconNames.Square)
+	})
+	bluetooth.onUartDataReceived(serial.delimiters(Delimiters.NewLine), function () {
+	    str = bluetooth.uartReadUntil(serial.delimiters(Delimiters.NewLine))
+	    basic.showIcon(IconNames.Heart)
+	    basic.pause(200)
+	    basic.showIcon(IconNames.Yes)
+	    bluetooth.uartWriteString("Received " + str + "\n")
+	})
+	let str = ""
+	bluetooth.startButtonService()
+	bluetooth.startLEDService()
+	bluetooth.startUartService()
+	basic.showIcon(IconNames.Square)
+	```
 
 1. Open `Project Settings` and change paring method from `JustWorks pairing (default)` to `No Pairing Required`. This setting is required for this experiment.
 1. Name the project (e.g., `BLE`) and save it. The `.hex` file (e.g. `microbit-BLE.hex`) for flashing to the device is automatically saved to your `Downloads` folder.
