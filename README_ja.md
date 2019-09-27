@@ -62,25 +62,25 @@
 1. 編集モードを `ブロック (Blocks)` から `JavaScript` に変更し、次のコードで置き換える。
 
 	```javascript
-bluetooth.onBluetoothConnected(function () {
-    basic.showIcon(IconNames.Yes)
-})
-bluetooth.onBluetoothDisconnected(function () {
-    basic.showIcon(IconNames.Square)
-})
-bluetooth.onUartDataReceived(serial.delimiters(Delimiters.NewLine), function () {
-    str = bluetooth.uartReadUntil(serial.delimiters(Delimiters.NewLine))
-    basic.showIcon(IconNames.Heart)
-    basic.pause(200)
-    basic.showIcon(IconNames.Yes)
-    bluetooth.uartWriteString("Received " + str + "\n")
-})
-let str = ""
-bluetooth.startButtonService()
-bluetooth.startLEDService()
-bluetooth.startUartService()
-basic.showIcon(IconNames.Square)
-```
+	bluetooth.onBluetoothConnected(function () {
+	    basic.showIcon(IconNames.Yes)
+	})
+	bluetooth.onBluetoothDisconnected(function () {
+	    basic.showIcon(IconNames.Square)
+	})
+	bluetooth.onUartDataReceived(serial.delimiters(Delimiters.NewLine), function () {
+	    str = bluetooth.uartReadUntil(serial.delimiters(Delimiters.NewLine))
+	    basic.showIcon(IconNames.Heart)
+	    basic.pause(200)
+	    basic.showIcon(IconNames.Yes)
+	    bluetooth.uartWriteString("Received " + str + "\n")
+	})
+	let str = ""
+	bluetooth.startButtonService()
+	bluetooth.startLEDService()
+	bluetooth.startUartService()
+	basic.showIcon(IconNames.Square)
+	```
 
 1. `プロジェクトの設定 (Project Settings)` を開き、ペアリング方法を `JustWorks pairing (default)` から `No Pairing Required` に変更する。この設定は本実験に必須。
 1. プロジェクトに名前 (`BLE` など) をつけて保存する。デバイスへの書き込み用の拡張子 `.hex` のファイル (`microbit-BLE.hex` など) が `ダウンロード` フォルダに自動的に保存される。
