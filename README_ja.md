@@ -61,24 +61,26 @@
 1. 拡張機能 `Bluetooth` が表示されていない場合、`高度なブロック (Advanced)` → `拡張機能 (Extensions)` から追加する。`Bluetooth` を追加すると、同時に使用できない拡張機能 `無線 (Radio)` は削除される。
 1. 編集モードを `ブロック (Blocks)` から `JavaScript` に変更し、次のコードで置き換える。
 
-		bluetooth.onBluetoothConnected(function () {
-			basic.showIcon(IconNames.Yes)
-		})
-		bluetooth.onBluetoothDisconnected(function () {
-			basic.showIcon(IconNames.Square)
-		})
-		bluetooth.onUartDataReceived(serial.delimiters(Delimiters.NewLine), function () {
-			str = bluetooth.uartReadUntil(serial.delimiters(Delimiters.NewLine))
-			basic.showIcon(IconNames.Heart)
-			bluetooth.uartWriteString("Received " + str + "\n")
-			basic.pause(500)
-			basic.showIcon(IconNames.Yes)
-		})
-		let str = ""
-		bluetooth.startButtonService()
-		bluetooth.startLEDService()
-		bluetooth.startUartService()
-		basic.showIcon(IconNames.Square)
+	```javascript
+bluetooth.onBluetoothConnected(function () {
+    basic.showIcon(IconNames.Yes)
+})
+bluetooth.onBluetoothDisconnected(function () {
+    basic.showIcon(IconNames.Square)
+})
+bluetooth.onUartDataReceived(serial.delimiters(Delimiters.NewLine), function () {
+    str = bluetooth.uartReadUntil(serial.delimiters(Delimiters.NewLine))
+    basic.showIcon(IconNames.Heart)
+    basic.pause(200)
+    basic.showIcon(IconNames.Yes)
+    bluetooth.uartWriteString("Received " + str + "\n")
+})
+let str = ""
+bluetooth.startButtonService()
+bluetooth.startLEDService()
+bluetooth.startUartService()
+basic.showIcon(IconNames.Square)
+```
 
 1. `プロジェクトの設定 (Project Settings)` を開き、ペアリング方法を `JustWorks pairing (default)` から `No Pairing Required` に変更する。この設定は本実験に必須。
 1. プロジェクトに名前 (`BLE` など) をつけて保存する。デバイスへの書き込み用の拡張子 `.hex` のファイル (`microbit-BLE.hex` など) が `ダウンロード` フォルダに自動的に保存される。

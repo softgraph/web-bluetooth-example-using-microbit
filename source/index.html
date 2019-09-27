@@ -52,30 +52,50 @@ Button Status:
 	</td></tr>
 
 	<tr><td><div>
-	<button type="button" id="id_button_show_message">
+LED Matrix:
+	</div></td><td>
+	<textarea id="id_textarea_led_matrix" rows="6" cols="39"></textarea>
+	<button type="button" id="id_button_clear_led_matrix">
+Clear
+	</button>
+	</td></tr>
+
+	<tr><td><div>
+LED Message:
+	</div></td><td>
+	<input id="id_input_text_led_message" type="text" size="40" value="WOW">
+	<button type="button" id="id_button_show_led_message">
 Show
 	</button>
-Message:
-	</div></td><td>
-	<input id="id_input_text_message" type="text" size="40">
 	</td></tr>
 
 	<tr><td><div>
-	<button type="button" id="id_button_send_request">
+UART Request:
+	</div></td><td>
+	<input id="id_input_text_uart_request" type="text" size="40" value="HELLO">
+	<button type="button" id="id_button_send_uart_request">
 Send
 	</button>
-Request:
-	</div></td><td>
-	<input id="id_input_text_request" type="text" size="40">
 	</td></tr>
 
 	<tr><td><div>
-Response:
+UART Response:
 	</div></td><td>
-	<input id="id_input_text_response" type="text" size="40" readonly>
+	<input id="id_input_text_uart_response" type="text" size="40" readonly>
 	</td></tr>
 
 	</table>
+
+	<hr>
+
+	<button type="button" id="id_button_start_test_scenario">
+Start Test Scenario
+	</button>
+	<button type="button" id="id_button_cancel_test_scenario">
+CancelTest Scenario
+	</button>
+	<br>
+	<input id="id_input_text_test_step" type="text" size="63" readonly>
 
 	<script src="main.js"></script>
 

@@ -1,8 +1,4 @@
 /* eslint-env browser, es6 */
-/*
-	@see
-		https://eslint.org/docs/user-guide/configuring#specifying-environments
-*/
 
 // ------------------------------------------------------------
 //	file
@@ -10,20 +6,29 @@
 
 /**	@file
 		Main implementation on the browser side for the Web Bluetooth example using BBC micro:bit.
-		The Bluetooth communication used in this example is defined by micro:bit Bluetooth Profile.
 	@author
 		Copyright (c) 2019 Tomoyuki Nakashima.
 	@license
 		This code is licensed under MIT license.
 		See `LICENSE` in the project root for more information.
 	@see
-		Refer to the following links for the details of micro:bit Bluetooth Profile.
+		- {@link
+			https://github.com/softgraph/web-bluetooth-example-using-microbit
+			Web Bluetooth example using BBC micro:bit
+			}
+			(github.com)
 		<br>
-		- {@link https://lancaster-university.github.io/microbit-docs/ble/profile/
-			micro:bit Bluetooth Profile (lancaster-university.github.io)}
+		- {@link
+			https://eslint.org/docs/user-guide/configuring#specifying-environments
+			ESLint / Specifying Environments
+			}
+			(eslint.org)
 		<br>
-		- {@link https://lancaster-university.github.io/microbit-docs/resources/bluetooth/bluetooth_profile.html
-			micro:bit Bluetooth profile specification (lancaster-university.github.io)}
+		- {@link
+			https://jsdoc.app
+			&#64;use JSDoc
+			}
+			(jsdoc.app)
 */
 
 // ------------------------------------------------------------
@@ -33,6 +38,18 @@
 /**
 	micro:bit Bluetooth Profile
 	@namespace	MicroBit
+	@see
+		- {@link
+			https://lancaster-university.github.io/microbit-docs/ble/profile/
+			micro:bit Bluetooth Profile
+			}
+			(lancaster-university.github.io)
+		<br>
+		- {@link
+			https://lancaster-university.github.io/microbit-docs/resources/bluetooth/bluetooth_profile.html
+			micro:bit Bluetooth profile specification
+			}
+			(lancaster-university.github.io)
 */
 const MicroBit = {
 	/**
@@ -71,7 +88,7 @@ const MicroBit = {
 		*/
 		kModelNumberString: '00002a24-0000-1000-8000-00805f9b34fb',
 
-		/*
+		/**
 			Serial Number String characteristic UUID
 			<br><br>
 			<b>[UUID]</b><br>
@@ -82,8 +99,13 @@ const MicroBit = {
 			<br><br>
 			<b>[Fields]</b><br>
 				1. Serial Number : utf8s
+			<br><br>
+			Note that the access to this characteristic is blocked with the following error.
+			<pre>	SecurityError: getCharacteristic(s) called with blocklisted UUID.	</pre>
+			@see
+				{@link https://goo.gl/4NeimX}
 		*/
-		//	kSerialNumberString: '00002a25-0000-1000-8000-00805f9b34fb',
+		kSerialNumberString: '00002a25-0000-1000-8000-00805f9b34fb',
 
 		/**
 			Firmware Revision String characteristic UUID
@@ -286,66 +308,64 @@ Octet 4, LED Row 5: bit4 bit3 bit2 bit1 bit0 </pre>
 class TextArea {
 	/**
 		constructor
-		@param {String} id - a id string for a `&lt;input type="text">` or `&lt;textarea>` element
+		@param	{String} id - a id string for a `&lt;input type="text">` or `&lt;textarea>` element
 	*/
 	constructor(id) {
-		/**	@member {String} - the id of the element
+		/**	@member	{String} - the id of the element
 		*/
-		this.id = id;
+		this._id = id;
 
-		/**	@member {Element} - the target `Element` (`HTMLInputElement` or HTMLTextAreaElement`)
+		/**	@member	{Element} - the target `Element` (`HTMLInputElement` or HTMLTextAreaElement`)
 		*/
-		this.target = null;
+		this._target = null;
 	}
 
 	/**
-		(set/get) text of the element
-		@type {String}
+		(get/set) the text of the element
+		@type	{String}
 	*/
-	set text(newValue) {
-		if(!this.target) {
-			this.target = document.getElementById(this.id);
-		}
-		this.target.value = newValue;
-	}
-
 	get text() {
-		if(!this.target) {
-			this.target = document.getElementById(this.id);
+		if(!this._target) {
+			this._target = document.getElementById(this._id);
 		}
-		return this.target.value;
+		return this._target.value;
+	}
+	set text(newValue) {
+		if(!this._target) {
+			this._target = document.getElementById(this._id);
+		}
+		this._target.value = newValue;
 	}
 }
 
 /**	@classdesc
 		A {@link Button} obejct represents a html element of `&lt;button>`.
-		<br>
 		The class can handle events of type `click`.
 */
 class Button {
 	/**
 		constructor
-		@param {String} id - a id string for a `&lt;button>` element
+		@param	{String} id - a id string for a `&lt;button>` element
 	*/
 	constructor(id) {
-		/**	@member {String} - the id of the element
+		/**	@member	{String} - the id of the element
 		*/
-		this.id = id;
+		this._id = id;
 
-		/**	@member {Element} - the target `Element` (`HTMLButtonElement`)
+		/**	@member	{Element} - the target `Element` (`HTMLButtonElement`)
 		*/
-		this.target = null;
+		this._target = null;
 	}
 
 	/**
 		Add click event listener
-		@param {function(Event)} listener - a click event listener
+		@param	{function(Event)} listener - a click event listener
 	*/
 	addClickEventListener(listener) {
-		if(!this.target) {
-			this.target = document.getElementById(this.id);
+		if(!this._target) {
+			this._target = document.getElementById(this._id);
 		}
-		this.target.addEventListener('click', listener, false);
+		this._target.addEventListener('click', listener, false);
 	}
 }
 
@@ -359,82 +379,82 @@ class Button {
 class BtgServer {
 	/**
 		constructor
-		@param {BluetoothDevice} device - a Bluetooth device
-		@param {BluetoothRemoteGATTServer} server - a Bluetooth GATT server of the device
-		@param {Array(UUID)} serviceUuidList - a list of service UUID for the server
+		@param	{BluetoothDevice} device - a Bluetooth device
+		@param	{BluetoothRemoteGATTServer} server - a Bluetooth GATT server of the device
+		@param	{Array(UUID)} serviceUuidList - a list of service UUID for the server
 	*/
 	constructor(device, server, serviceUuidList) {
-		/**	@member {BluetoothDevice} - the connected Bluetooth device
+		/**	@member	{BluetoothDevice} - the connected Bluetooth device
 		*/
-		this.device = device;
+		this._device = device;
 
-		/**	@member {BluetoothRemoteGATTServer} - the target Bluetooth GATT server of the device
+		/**	@member	{BluetoothRemoteGATTServer} - the target Bluetooth GATT server of the device
 		*/
-		this.target = server;
+		this._target = server;
 
-		/**	@member {Array(UUID)} - the list of service UUID of the server
+		/**	@member	{Array(UUID)} - the list of service UUID of the server
 		*/
-		this.uuidList = serviceUuidList;
+		this._uuidList = serviceUuidList;
 
-		/**	@member {Map(UUID, BtgService)} - the list of registered service of the server
+		/**	@member	{Map(UUID, BtgService)} - the list of registered service of the server
 		*/
-		this.services = new Map();
+		this._services = new Map();
 
-		/**	@member {Map(UUID, BtgCharacteristic)} - the list of registered characteristic of the server
+		/**	@member	{Map(UUID, BtgCharacteristic)} - the list of registered characteristic of the server
 		*/
-		this.characteristics = new Map();
+		this._characteristics = new Map();
 	}
 
 	/**
 		Get primary services from the target Bluetooth GATT server
-		@returns {Array(BluetoothGATTService)}
+		@returns	{Array(BluetoothRemoteGATTService)}
 	*/
 	getPrimaryServices() {
-		return this.uuidList.map(x => this.target.getPrimaryService(x));
+		return this._uuidList.map(x => this._target.getPrimaryService(x));
 	}
 
 	/**
 		Get characteristics for all primary services from the target Bluetooth GATT server
-		@returns {Array(BluetoothGATTCharacteristic)}
+		@returns	{Array(BluetoothRemoteGATTCharacteristic)}
 	*/
 	getCharacteristics() {
-		return this.uuidList.flatMap(x => this.services.get(x).getCharacteristics());
+		return this._uuidList.flatMap(x => this._services.get(x).getCharacteristics());
 	}
 
 	/**
 		Register a Bluetooth GATT service
-		@param {UUID} uuid - a UUID
-		@param {BtgService} btService - a Bluetooth GATT service for the UUID
+		@param	{UUID} uuid - a UUID
+		@param	{BtgService} btService - a Bluetooth GATT service for the UUID
 	*/
 	registerService(uuid, btService) {
-		this.services.set(uuid, btService);
+		this._services.set(uuid, btService);
 	}
 
 	/**
 		Get a registered Bluetooth GATT service for a UUID
-		@param {UUID} uuid - a UUID
-		@returns {BtgService}
+		@param	{UUID} uuid - a UUID
+		@returns	{BtgService}
 	*/
 	getService(uuid) {
-		return this.services.get(uuid);
+		return this._services.get(uuid);
 	}
 
 	/**
 		Register a Bluetooth GATT characteristic
-		@param {UUID} uuid - a UUID
-		@param {BtgCharacteristic} characteristic - a Bluetooth GATT characteristic for the UUID
+		@param	{UUID} uuid - a UUID
+		@param	{BtgCharacteristic} characteristic - a Bluetooth GATT characteristic for the UUID
 	*/
 	registerCharacteristic(uuid, characteristic) {
-		this.characteristics.set(uuid, characteristic);
+		this._characteristics.set(uuid, characteristic);
 	}
 
 	/**
 		Get a registered Bluetooth GATT characteristic for a UUID
-		@param {UUID} uuid - a UUID
-		@returns {BtgCharacteristic}
+		@param	{UUID} uuid - a UUID
+		@returns	{BtgCharacteristic}
 	*/
 	getCharacteristic(uuid) {
-		return this.characteristics.get(uuid);
+		return this._characteristics.get(uuid);
 	}
 }
 
@@ -443,36 +463,36 @@ class BtgServer {
 */
 class BtgService {
 	/**
-		@param {BtgServer} server - a Bluetooth GATT server
-		@param {Array(BluetoothGATTService)} services - a List of Bluetooth GATT service for the server
-		@param {Array(Array(UUID))} characteristicUuidLists - a List of characteristic UUID List for the server
+		@param	{BtgServer} server - a Bluetooth GATT server
+		@param	{Array(BluetoothRemoteGATTService)} services - a List of Bluetooth GATT service for the server
+		@param	{Array(Array(UUID))} characteristicUuidLists - a List of characteristic UUID List for the server
 	*/
 	static registerServices(server, services, characteristicUuidLists) {
 		let i = 0;
 		let service;
-		for (service of services) {
+		for(service of services) {
 			// create an object and register it to the server.
 			new BtgService(server, service, characteristicUuidLists[i++]);
 		}
 	}
 	/**
 		constructor
-		@param {BtgServer} server - a Bluetooth GATT server
-		@param {BluetoothGATTService} service - a Bluetooth GATT service of the server
-		@param {Array(UUID)} characteristicUuidList - a List of characteristic UUID for the service
+		@param	{BtgServer} server - a Bluetooth GATT server
+		@param	{BluetoothRemoteGATTService} service - a Bluetooth GATT service of the server
+		@param	{Array(UUID)} characteristicUuidList - a List of characteristic UUID for the service
 	*/
 	constructor(server, service, characteristicUuidList) {
-		/**	@member {BtgServer} - the connected Bluetooth GATT server
+		/**	@member	{BtgServer} - the connected Bluetooth GATT server
 		*/
-		this.server = server;
+		this._server = server;
 
-		/**	@member {BluetoothGATTService} - the target Bluetooth GATT service
+		/**	@member	{BluetoothRemoteGATTService} - the target Bluetooth GATT service
 		*/
-		this.target = service;
+		this._target = service;
 
-		/**	@member {Array(UUID)} - the list of characteristic UUID for the service
+		/**	@member	{Array(UUID)} - the list of characteristic UUID for the service
 		*/
-		this.uuidList = characteristicUuidList;
+		this._uuidList = characteristicUuidList;
 
 		this.init();
 	}
@@ -481,15 +501,15 @@ class BtgService {
 		Initialize the object
 	*/
 	init() {
-		this.server.registerService(this.target.uuid, this);
+		this._server.registerService(this._target.uuid, this);
 	}
 
 	/**
 		Get characteristics from the target service
-		@returns {Array(BluetoothGATTCharacteristic)}
+		@returns	{Array(BluetoothRemoteGATTCharacteristic)}
 	*/
 	getCharacteristics() {
-		return this.uuidList.map(x => this.target.getCharacteristic(x));
+		return this._uuidList.map(x => this._target.getCharacteristic(x));
 	}
 }
 
@@ -498,12 +518,12 @@ class BtgService {
 */
 class BtgCharacteristic {
 	/**
-		@param {BtgServer} server - a Bluetooth GATT server
-		@param {Array(BluetoothGATTCharacteristic)} characteristics - a List of Bluetooth GATT characteristic for a service of the server
+		@param	{BtgServer} server - a Bluetooth GATT server
+		@param	{Array(BluetoothRemoteGATTCharacteristic)} characteristics - a List of Bluetooth GATT characteristic for a service of the server
 	*/
 	static registerCharacteristics(server, characteristics) {
 		let characteristic;
-		for (characteristic of characteristics) {
+		for(characteristic of characteristics) {
 			// create an object and register it to the server.
 			new BtgCharacteristic(server, characteristic);
 		}
@@ -511,21 +531,17 @@ class BtgCharacteristic {
 
 	/**
 		constructor
-		@param {BtgServer} server - a Bluetooth GATT server
-		@param {BluetoothGATTCharacteristic} characteristic - a Bluetooth GATT characteristic of the server
+		@param	{BtgServer} server - a Bluetooth GATT server
+		@param	{BluetoothRemoteGATTCharacteristic} characteristic - a Bluetooth GATT characteristic of the server
 	*/
 	constructor(server, characteristic) {
-		/**	@member {BtgServer} - the connected Bluetooth GATT server
+		/**	@member	{BtgServer} - the connected Bluetooth GATT server
 		*/
-		this.server = server;
+		this._server = server;
 
-		/**	@member {BluetoothGATTCharacteristic} - the target Bluetooth GATT characteristic of the server
+		/**	@member	{BluetoothRemoteGATTCharacteristic} - the target Bluetooth GATT characteristic of the server
 		*/
-		this.target = characteristic;
-
-		/**	@member {function(ArrayBuffer)|function(String)} - the receiver function for {@link BtgCharacteristic#readData} or {@link BtgCharacteristic#readText}
-		*/
-		this.receiver = null;
+		this._target = characteristic;
 
 		this.init();
 	}
@@ -534,62 +550,87 @@ class BtgCharacteristic {
 		Initialize the object
 	*/
 	init() {
-		this.server.registerCharacteristic(this.target.uuid, this);
+		this._server.registerCharacteristic(this._target.uuid, this);
 	}
 
 	/**
 		Add value changed event listener
-		@param {function(Event)} listener - a value changed event listener
+		@param	{function(Event)} listener - a value changed event listener
 	*/
 	addValueChangedEventListener(listener) {
-		this.target.startNotifications().then(characteristic => {	// BluetoothRemoteGATTCharacteristic
-			characteristic.addEventListener('characteristicvaluechanged', listener);
-		});
+		this._target.startNotifications().then(
+			// BluetoothRemoteGATTCharacteristic
+			characteristic => characteristic.addEventListener('characteristicvaluechanged', listener)
+		).catch(
+			error => alert(error)
+		);
 	}
 
 	/**
 		Request to read data
-		<br><br>
-		{@link BtgCharacteristic#receiver} is called when the data is ready
+		@param	{function(ArrayBuffer)} completionHandler - a completion handler
 	*/
-	readData() {
-		this.target.readValue().then(data => {	// data: ArrayBuffer
-			this.receiver(data);
-		}).catch(reason => {
-			alert(reason);
-		});
+	readData(completionHandler) {
+		this._target.readValue().then(
+			// ArrayBuffer
+			data => completionHandler(data)
+		).catch(
+			error => alert(error)
+		);
 	}
 
 	/**
 		Request to read text
-		<br><br>
-		{@link BtgCharacteristic#receiver} is called when the text is ready
+		@param	{function(String)} completionHandler - a completion handler
 	*/
-	readText() {
-		this.target.readValue().then(data => {	// data: ArrayBuffer
-			const decoder = new TextDecoder();
-			const text = decoder.decode(data);
-			this.receiver(text);
-		}).catch(reason => {
-			alert(reason);
-		});
+	readText(completionHandler) {
+		this._target.readValue().then(
+			// ArrayBuffer
+			data => {
+				const decoder = new TextDecoder();
+				const text = decoder.decode(data);
+				completionHandler(text);
+			}
+		).catch(
+			error => alert(error)
+		);
 	}
 
 	/**
 		Write data
+		@param	{ArrayBuffer} data
+		@param	{function()} completionHandler - a completion handler or undefined
 	*/
-	writeData(data) {	// data: ArrayBuffer
-		this.target.writeValue(data);
+	writeData(data, completionHandler) {
+		this._target.writeValue(data).then(
+			() => {
+				if(completionHandler) {
+					completionHandler();
+				}
+			}
+		).catch(
+			error => alert(error)
+		);
 	}
 
 	/**
 		Write text
+		@param	{String} text
+		@param	{function()} completionHandler - a completion handler or undefined
 	*/
-	writeText(text) {	// text: String
+	writeText(text, completionHandler) {
 		let length = text.length;
 		if(length > 0) {
 			const encoder = new TextEncoder();
-			this.target.writeValue(encoder.encode(text));
+			this._target.writeValue(encoder.encode(text)).then(
+				() => {
+					if(completionHandler) {
+						completionHandler();
+					}
+				}
+			).catch(
+				error => alert(error)
+			);
 		}
 	}
 }
@@ -602,25 +643,43 @@ class BtgCharacteristic {
 	Connect button
 	@var	{Button}
 */
-let gConnectButton		= new Button('id_button_connect');
+let gConnectButton				= new Button('id_button_connect');
 
 /**
 	Disconnect button
 	@var	{Button}
 */
-let gDisconnectButton	= new Button('id_button_disconnect');
+let gDisconnectButton			= new Button('id_button_disconnect');
 
 /**
-	Show Message button
+	Clear LED Matrix button
 	@var	{Button}
 */
-let gShowMessageButton	= new Button('id_button_show_message');
+let gClearLedMatrixButton		= new Button('id_button_clear_led_matrix');
 
 /**
-	Send Request button
+	Show LED Message button
 	@var	{Button}
 */
-let gSendRequestButton	= new Button('id_button_send_request');
+let gShowLedMessageButton		= new Button('id_button_show_led_message');
+
+/**
+	Send UART Request button
+	@var	{Button}
+*/
+let gSendUartRequestButton		= new Button('id_button_send_uart_request');
+
+/**
+	Start Test Scenario button
+	@var	{Button}
+*/
+let gStartTestScenarioButton	= new Button('id_button_start_test_scenario');
+
+/**
+	Cancel Test Scenario button
+	@var	{Button}
+*/
+let gCancelTestScenarioButton	= new Button('id_button_cancel_test_scenario');
 
 /**
 	Conection Status field
@@ -647,22 +706,34 @@ let gFirmwareRevisionTextArea	= new TextArea('id_input_text_firmware_revision');
 let gButtonStatusTextArea		= new TextArea('id_input_text_button_status');
 
 /**
+	Led Matrix field
+	@var	{TextArea}
+*/
+let gLedMatrixTextArea			= new TextArea('id_textarea_led_matrix');
+
+/**
 	Message field
 	@var	{TextArea}
 */
-let gMessageTextArea			= new TextArea('id_input_text_message');
+let gLedMessageTextArea			= new TextArea('id_input_text_led_message');
 
 /**
 	Request field
 	@var	{TextArea}
 */
-let gRequesTextArea				= new TextArea('id_input_text_request');
+let gUartRequestTextArea		= new TextArea('id_input_text_uart_request');
 
 /**
 	Response field
 	@var	{TextArea}
 */
-let gResponseTextArea			= new TextArea('id_input_text_response');
+let gUartResponseTextArea		= new TextArea('id_input_text_uart_response');
+
+/**
+	Response field
+	@var	{TextArea}
+*/
+let gTestStepTextArea			= new TextArea('id_input_text_test_step');
 
 // ------------------------------------------------------------
 //	Global variables for the interface to a Bluetooth device
@@ -681,7 +752,8 @@ let gBtDevice = null;
 let gBtgServer = null;
 
 /**
-	The Bluetooth device filter to exclude incompatible devices from the list to choose a device.
+	The Bluetooth device filter.
+	Used for `filters` of `navigator.bluetooth.requestDevice()`.
 	@namespace	sBtDeviceFilter
 */
 const sBtDeviceFilter = {
@@ -692,7 +764,8 @@ const sBtDeviceFilter = {
 };
 
 /**
-	The list of Bluetooth service uuid.
+	The list of Bluetooth GATT service uuid.
+	Used for `optionalServices` of `navigator.bluetooth.requestDevice()`.
 	@var	{Array(UUID)}
 */
 const sBtgServiceUuidList = [
@@ -703,15 +776,7 @@ const sBtgServiceUuidList = [
 ];
 
 /**
-	The list of Bluetooth characteristic uuid for each service.
-	<br><br>
-	Note that the access to {@limnk MicroBit.DeviceInformation.kSerialNumberString} is blocked with the following error.
-	<br>
-	- SecurityError: getCharacteristic(s) called with blocklisted UUID.
-	<br>
-	See also
-	<br>
-	- {@link https://goo.gl/4NeimX}
+	The list of Bluetooth GATT characteristic uuid for each service of {@link sBtgServiceUuidList}.
 	@var	{Array(Array(UUID))}
 */
 const sBtgCharacteristicUuidList = [
@@ -736,7 +801,7 @@ const sBtgCharacteristicUuidList = [
 ];
 
 // ------------------------------------------------------------
-//	Constants
+//	Global constants
 // ------------------------------------------------------------
 
 /**
@@ -746,26 +811,48 @@ const sBtgCharacteristicUuidList = [
 const kMicroBitLedScrollingDelayInMilliseconds = 100;
 
 // ------------------------------------------------------------
-//
-//	No JSDoc documentation for the part below
-//
+//	Implementation for preparation
 // ------------------------------------------------------------
 
-// ------------------------------------------------------------
-//	Implementation for window events (No JSDoc)
-// ------------------------------------------------------------
-
-window.onload = onLoadWindow;
-
-function onLoadWindow() {
-	window.onbeforeunload = onBeforeUnloadWindow;
-
+/**
+	Handle Window Opened
+*/
+function handleWindowOpened() {
 	gConnectButton.addClickEventListener(onClickConnectButton);
 	gDisconnectButton.addClickEventListener(onClickDisconnectButton);
-	gShowMessageButton.addClickEventListener(onClickShowMessageButton);
-	gSendRequestButton.addClickEventListener(onClickSendRequestButton);
+	gClearLedMatrixButton.addClickEventListener(onClickClearLedMatrixButton);
+	gShowLedMessageButton.addClickEventListener(onClickShowLedMessageButton);
+	gSendUartRequestButton.addClickEventListener(onClickSendUartRequestButton);
+	gStartTestScenarioButton.addClickEventListener(onClickStartTestScenarioButton);
+	gCancelTestScenarioButton.addClickEventListener(onClickCancelTestScenarioButton);
 }
 
+/**
+	Handle Connected
+*/
+function handleConnected() {
+	retrieveDeviceInformation();
+	retrieveLedMatrix();
+	setScrollingDelay();
+	observeButtons();
+	observeUart();
+}
+
+// ------------------------------------------------------------
+//	Implementation for window events
+// ------------------------------------------------------------
+
+/**
+	On Load Window
+*/
+function onLoadWindow() {
+	window.onbeforeunload = onBeforeUnloadWindow;
+	handleWindowOpened();
+}
+
+/**
+	On Before Unload Window
+*/
 function onBeforeUnloadWindow() {
 	if(gBtDevice && gBtDevice.gatt.connected) {
 		gBtDevice.gatt.disconnect();
@@ -776,6 +863,9 @@ function onBeforeUnloadWindow() {
 //	Implementation for Bluetooth connection
 // ------------------------------------------------------------
 
+/**
+	On Click Connect Button
+*/
 function onClickConnectButton() {
 	if (!navigator.bluetooth) {
 		alert(`Web Bluetooth is not available on this browser.`);
@@ -783,35 +873,47 @@ function onClickConnectButton() {
 	}
 
 	gConnectionStatusTextArea.text = 'Connecting...';
-	navigator.bluetooth.requestDevice({
-		filters: [sBtDeviceFilter],
-		optionalServices: sBtgServiceUuidList
-	}).then(device => {		// device: BluetoothDevice
-		gBtDevice = device;
-		return device.gatt.connect();
-	}).then(server => {		// server: BluetoothRemoteGATTServer
-		gBtgServer = new BtgServer(gBtDevice, server, sBtgServiceUuidList);
-		return Promise.all(gBtgServer.getPrimaryServices());
-	}).then(services => {	// services: [ BluetoothGATTService ]
-		BtgService.registerServices(gBtgServer, services, sBtgCharacteristicUuidList);
-		return Promise.all(gBtgServer.getCharacteristics());
-	}).then(characteristics => {	// characteristics: [ BluetoothGATTCharacteristic ]
-		BtgCharacteristic.registerCharacteristics(gBtgServer, characteristics);
-		handleConnected();
-		gConnectionStatusTextArea.text = 'Connected';
-	}).catch(reason => {
-		gConnectionStatusTextArea.text = 'Connection Failed';	// this update is suspended while the alert below is open
-		alert(reason);
-	});
+	navigator.bluetooth.requestDevice(
+		{
+			filters: [sBtDeviceFilter],
+			optionalServices: sBtgServiceUuidList
+		}
+	).then(
+		// BluetoothDevice
+		device => {
+			gBtDevice = device;
+			return device.gatt.connect();
+		}
+	).then(
+		// BluetoothRemoteGATTServer
+		server => {
+			gBtgServer = new BtgServer(gBtDevice, server, sBtgServiceUuidList);
+			return Promise.all(gBtgServer.getPrimaryServices());
+		}
+	).then(
+		// [BluetoothRemoteGATTService]
+		services => {
+			BtgService.registerServices(gBtgServer, services, sBtgCharacteristicUuidList);
+			return Promise.all(gBtgServer.getCharacteristics());
+		}
+	).then(
+		// [BluetoothRemoteGATTCharacteristic]
+		characteristics => {
+			BtgCharacteristic.registerCharacteristics(gBtgServer, characteristics);
+			handleConnected();
+			gConnectionStatusTextArea.text = 'Connected';
+		}
+	).catch(
+		error => {
+			gConnectionStatusTextArea.text = 'Connection Failed';	// this update is suspended while the modal alert below is active
+			alert(error);
+		}
+	);
 }
 
-function handleConnected() {
-	retrieveDeviceInformation();
-	setScrollingDelay();
-	observeButtons();
-	observeUart();
-}
-
+/**
+	On Click Disconnect Button
+*/
 function onClickDisconnectButton() {
 	if(gBtDevice && gBtDevice.gatt.connected) {
 		gBtDevice.gatt.disconnect();
@@ -832,20 +934,21 @@ function onClickDisconnectButton() {
 //	Implementation for micro:bit's Device Information Service
 // ------------------------------------------------------------
 
+/**
+	Retrieve Device Information
+*/
 function retrieveDeviceInformation() {
 	let characteristic = gBtgServer.getCharacteristic(MicroBit.DeviceInformation.kModelNumberString);
 	if(characteristic) {
-		characteristic.receiver = function (text) {
-			gModelNumberTextArea.text = text;
-		};
-		characteristic.readText();
+		characteristic.readText(
+			text => gModelNumberTextArea.text = text
+		);
 	}
 	characteristic = gBtgServer.getCharacteristic(MicroBit.DeviceInformation.kFirmwareRevisionString);
 	if(characteristic) {
-		characteristic.receiver = function (text) {
-			gFirmwareRevisionTextArea.text = text;
-		};
-		characteristic.readText();
+		characteristic.readText(
+			text => gFirmwareRevisionTextArea.text = text
+		);
 	}
 }
 
@@ -853,42 +956,45 @@ function retrieveDeviceInformation() {
 //	Implementation for micro:bit's Button Service
 // ------------------------------------------------------------
 
+/**
+	Observe Buttons
+*/
 function observeButtons()
 {
 	let characteristic;
 	characteristic = gBtgServer.getCharacteristic(MicroBit.ButtonService.kButtonAState);
 	if(characteristic) {
-		characteristic.addValueChangedEventListener(handleButtonAStateChanged);
+		characteristic.addValueChangedEventListener(
+			event => {
+				let value = event.target.value.getUint8(0);
+				if(value == 1) {
+					gButtonStatusTextArea.text = 'Button A Pressed';
+				}
+				else if(value == 2) {
+					gButtonStatusTextArea.text = 'Button A Long Pressed';
+				}
+				else {
+					gButtonStatusTextArea.text = '';
+				}
+			}
+		);
 	}
 	characteristic = gBtgServer.getCharacteristic(MicroBit.ButtonService.kButtonBState);
 	if(characteristic) {
-		characteristic.addValueChangedEventListener(handleButtonBStateChanged);
-	}
-}
-
-function handleButtonAStateChanged(event) {
-	let value = event.target.value.getUint8(0);
-	if(value == 1) {
-		gButtonStatusTextArea.text = 'Button A Pressed';
-	}
-	else if(value == 2) {
-		gButtonStatusTextArea.text = 'Button A Long Pressed';
-	}
-	else {
-		gButtonStatusTextArea.text = '';
-	}
-}
-
-function handleButtonBStateChanged(event) {
-	let value = event.target.value.getUint8(0);
-	if(value == 1) {
-		gButtonStatusTextArea.text = 'Button B Pressed';
-	}
-	else if(value == 2) {
-		gButtonStatusTextArea.text = 'Button B Long Pressed';
-	}
-	else {
-		gButtonStatusTextArea.text = '';
+		characteristic.addValueChangedEventListener(
+			event => {
+				let value = event.target.value.getUint8(0);
+				if(value == 1) {
+					gButtonStatusTextArea.text = 'Button B Pressed';
+				}
+				else if(value == 2) {
+					gButtonStatusTextArea.text = 'Button B Long Pressed';
+				}
+				else {
+					gButtonStatusTextArea.text = '';
+				}
+			}
+		);
 	}
 }
 
@@ -896,6 +1002,91 @@ function handleButtonBStateChanged(event) {
 //	Implementation for micro:bit's LED Service
 // ------------------------------------------------------------
 
+/**
+	LED Matrix Data for Blank
+	@var	{TypedArray}
+*/
+const sLedMatrixBlank = Uint8Array.of(
+	0x00,	//	- - - - -
+	0x00,	//	- - - - -
+	0x00,	//	- - - - -
+	0x00,	//	- - - - -
+	0x00	//	- - - - -
+);
+
+/**
+	LED Matrix Data for Check Mark
+	@var	{TypedArray}
+*/
+const sLedMatrixCheckMark = Uint8Array.of(
+	0x00,	//	- - - - -
+	0x01,	//	- - - - X
+	0x02,	//	- - - X -
+	0x14,	//	X - X - -
+	0x08	//	- X - - -
+);
+
+/**
+	LED Matrix State
+	@var	{TypedArray}
+*/
+const gLedMatrixState = new Uint8Array(5);
+
+
+/**
+	Are Typed Arrays Equal
+	@param	{TypedArray} a
+	@param	{TypedArray} b
+	@returns	{Boolean}
+*/
+function areTypedArraysEqual(a, b) {
+	if (a.byteLength !== b.byteLength) {
+		return false;
+	}
+	return a.every((val, i) => val === b[i]);
+}
+
+/**
+	Retrieve LED Matrix
+*/
+function retrieveLedMatrix() {
+	const characteristic = gBtgServer.getCharacteristic(MicroBit.LedService.kLedMatrixState);
+	if(characteristic) {
+		characteristic.readData(
+			data => {
+				if(!data || data.byteLength != 5) {
+					return;
+				}
+				let text = '';
+				let i;
+				for(i = 0; i < 5; i++) {
+					if(text != '') {
+						text += '\n';
+					}
+					let row = data.getUint8(i);
+					text += charForLedPixel(row & 0x10);
+					text += charForLedPixel(row & 0x08);
+					text += charForLedPixel(row & 0x04);
+					text += charForLedPixel(row & 0x02);
+					text += charForLedPixel(row & 0x01);
+					gLedMatrixState[i] = row;
+				}
+				gLedMatrixTextArea.text = text;
+			}
+		);
+	}
+}
+
+/**
+	Char For Led Pixel
+*/
+function charForLedPixel(value) {
+	return value ? '■' : '□';
+}
+
+/**
+	Set Scrolling Delay for LED
+*/
 function setScrollingDelay() {
 	const characteristic = gBtgServer.getCharacteristic(MicroBit.LedService.kScrollingDelay);
 	if(!characteristic) {
@@ -909,41 +1100,54 @@ function setScrollingDelay() {
 	characteristic.writeData(data);
 }
 
-function onClickShowMessageButton() {
-	const characteristic = gBtgServer.getCharacteristic(MicroBit.LedService.kLedText);
-	if(!characteristic) {
-		return;
-	}
-	try {
-		const text = gMessageTextArea.text;
-		const length = text.length;
-		if(length > 0) {
-			characteristic.writeText(text);
-			setTimeout(showCheckmark, kMicroBitLedScrollingDelayInMilliseconds * 6 * (length + 2));
-		}
-	}
-	catch (reason) {
-		alert(reason);
-	}
-}
-
-function showCheckmark() {
+/**
+	Show LED Matrix
+	@param	{ArrayBuffer} data - LED Matrix Data
+*/
+function showLedMatrix(data) {
 	const characteristic = gBtgServer.getCharacteristic(MicroBit.LedService.kLedMatrixState);
 	if(!characteristic) {
 		return;
 	}
 	try {
-		let data = Uint8Array.of(
-			0x00,	//	- - - - -
-			0x01,	//	- - - - X
-			0x02,	//	- - - X -
-			0x14,	//	X - X - -
-			0x08	//	- X - - -
+		characteristic.writeData(
+			data,
+			() => retrieveLedMatrix()
 		);
-		characteristic.writeData(data);
 	}
-	catch (reason) {
-		alert(reason);
+	catch(error) {
+		alert(error);
+	}
+}
+
+/**
+	On Click Clear LED Matrix Button
+*/
+function onClickClearLedMatrixButton() {
+	showLedMatrix(sLedMatrixBlank);
+}
+
+/**
+	On Click Show LED Message Button
+*/
+function onClickShowLedMessageButton() {
+	const characteristic = gBtgServer.getCharacteristic(MicroBit.LedService.kLedText);
+	if(!characteristic) {
+		return;
+	}
+	try {
+		const text = gLedMessageTextArea.text;
+		const length = text.length;
+		if(length > 0) {
+			characteristic.writeText(text);
+			setTimeout(
+				() => showLedMatrix(sLedMatrixCheckMark),
+				kMicroBitLedScrollingDelayInMilliseconds * 6 * (length + 2)
+			);
+		}
+	}
+	catch(error) {
+		alert(error);
 	}
 }
 
@@ -951,40 +1155,205 @@ function showCheckmark() {
 //	Implementation for micro:bit's UART Service
 // ------------------------------------------------------------
 
-function onClickSendRequestButton() {
-	const txCharacteristic = gBtgServer.getCharacteristic(MicroBit.UartService.kRxCharacteristic);
-	if(txCharacteristic) {
+/**
+	Observe UART
+*/
+function observeUart()
+{
+	const characteristic = gBtgServer.getCharacteristic(MicroBit.UartService.kTxCharacteristic);
+	if(characteristic) {
+		characteristic.addValueChangedEventListener(
+			event => {
+				const data = event.target.value;
+				const decoder = new TextDecoder();
+				const text = decoder.decode(data);
+				gUartResponseTextArea.text = text;
+				retrieveLedMatrix();
+			}
+		);
+	}
+}
+
+/**
+	On Click Send Request Button
+*/
+function onClickSendUartRequestButton() {
+	const characteristic = gBtgServer.getCharacteristic(MicroBit.UartService.kRxCharacteristic);
+	if(characteristic) {
 		try {
 			/*
 			let data = Uint8Array.of(0x4a, 0x42, 0x3A);
-			txCharacteristic.writeData(data);
+			characteristic.writeData(data);
 			*/
-			let text = gRequesTextArea.text;
+			let text = gUartRequestTextArea.text;
 			const length = text.length;
 			if(length > 0) {
 				text += '\n';
-				txCharacteristic.writeText(text);
+				characteristic.writeText(text);
 			}
 		}
-		catch (reason) {
-			alert(reason);
+		catch(error) {
+			alert(error);
 		}
 	}
 }
 
-function observeUart()
-{
-	let characteristic = gBtgServer.getCharacteristic(MicroBit.UartService.kTxCharacteristic);
-	if(characteristic) {
-		characteristic.addValueChangedEventListener(handleTxCharacteristicChanged);
+// ------------------------------------------------------------
+//	Implementation for test scenario
+// ------------------------------------------------------------
+
+/**
+	Test Scenario
+*/
+const sTestScenario = [
+	{
+		condition: () => true,
+		guide: 'Press Connect button and choose a micro:bit to connect.'
+	},
+	{
+		condition: () => gConnectionStatusTextArea.text == 'Connected',
+		guide: 'Depress button A on the connected micro:bit.'
+	},
+	{
+		condition: () => gButtonStatusTextArea.text == 'Button A Pressed',
+		guide: 'Hold button A on the connected micro:bit.'
+	},
+	{
+		condition: () => gButtonStatusTextArea.text == 'Button A Long Pressed',
+		guide: 'Release button A on the connected micro:bit.'
+	},
+	{
+		condition: () => gButtonStatusTextArea.text == '',
+		guide: 'Depress button B on the connected micro:bit.'
+	},
+	{
+		condition: () => gButtonStatusTextArea.text == 'Button B Pressed',
+		guide: 'Hold button B on the connected micro:bit.'
+	},
+	{
+		condition: () => gButtonStatusTextArea.text == 'Button B Long Pressed',
+		guide: 'Release button B on the connected micro:bit.'
+	},
+	{
+		condition: () => gButtonStatusTextArea.text == '',
+		guide: 'Press LED Matrix Clear button.'
+	},
+	{
+		condition: () => areTypedArraysEqual(gLedMatrixState, sLedMatrixBlank),
+		guide: 'Type text in LED Message field and then press Show button.'
+	},
+	{
+		condition: () => areTypedArraysEqual(gLedMatrixState, sLedMatrixCheckMark),
+		guide: 'Press LED Matrix Clear button.'
+	},
+	{
+		condition: () => areTypedArraysEqual(gLedMatrixState, sLedMatrixBlank),
+		guide: 'Type text in UART Request field and then press Send button.'
+	},
+	{
+		condition: () => areTypedArraysEqual(gLedMatrixState, sLedMatrixCheckMark),
+		guide: 'Completed'
+	}
+];
+
+/**
+	Test Step Number
+*/
+let gTestStep = -1;
+
+/**
+	Test Scenario Timer ID or "off"
+*/
+let gTestScenarioTimer = "off";
+
+/**
+	On Click Start Test Scenario Button
+*/
+function onClickStartTestScenarioButton() {
+	if(gTestStep < 0) {
+		startTestScenario();
 	}
 }
 
-function handleTxCharacteristicChanged(event) {
-	const data = event.target.value;
-	const decoder = new TextDecoder();
-	const text = decoder.decode(data);
-	gResponseTextArea.text = text;
+/**
+	On Click Cancel Test Scenario Button
+*/
+function onClickCancelTestScenarioButton() {
+	if(0 <= gTestStep) {
+		gTestStepTextArea.text = 'Canceled.';
+		stopTestScenario();
+	}
 }
+
+/**
+	Start Test Scenario
+*/
+function startTestScenario() {
+	gTestStep = 0;
+	cancelIntervalTimer();
+	maintainTestScenario();
+	startIntervalTimer();
+}
+
+/**
+	Stop Test Scenario
+*/
+function stopTestScenario() {
+	cancelIntervalTimer();
+	gTestStep = -1;
+}
+
+/**
+	Start Interval Timer
+*/
+function startIntervalTimer() {
+	gTestScenarioTimer = setInterval(maintainTestScenario, 1000);
+}
+
+/**
+	Cancel Interval Timer
+*/
+function cancelIntervalTimer() {
+	if(gTestScenarioTimer != "off") {
+		clearInterval(gTestScenarioTimer);
+		gTestScenarioTimer = "off";
+	}
+}
+
+/**
+	Maintain Test Scenario
+*/
+function maintainTestScenario() {
+	if((0 <= gTestStep) && (gTestStep < sTestScenario.length)) {
+		if(!(sTestScenario[gTestStep].condition)()) {
+			// wait for the condition
+			return;
+		}
+
+		// show the guide
+		gTestStepTextArea.text =
+			(gTestStep + 1).toString() + '. ' + sTestScenario[gTestStep].guide;
+
+		gTestStep++;
+		if(gTestStep < sTestScenario.length) {
+			// go to the next step
+			return;
+		}
+	}
+	stopTestScenario();
+}
+
+// ------------------------------------------------------------
+//	Implementation for main
+// ------------------------------------------------------------
+
+/**
+	main
+*/
+function main() {
+	window.onload = onLoadWindow;
+}
+
+main();
 
 // ------------------------------------------------------------
