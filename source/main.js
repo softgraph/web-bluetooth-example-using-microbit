@@ -658,6 +658,12 @@ let gDisconnectButton			= new Button('id_button_disconnect');
 let gClearLedMatrixButton		= new Button('id_button_clear_led_matrix');
 
 /**
+	Refresh LED Matrix button
+	@var	{Button}
+*/
+let gRefreshLedMatrixButton		= new Button('id_button_refresh_led_matrix');
+
+/**
 	Show LED Message button
 	@var	{Button}
 */
@@ -782,7 +788,9 @@ const sBtgServiceUuidList = [
 const sBtgCharacteristicUuidList = [
 	[
 		MicroBit.DeviceInformation.kModelNumberString,
-	//	MicroBit.DeviceInformation.kSerialNumberString,
+		/*
+		MicroBit.DeviceInformation.kSerialNumberString,
+		*/
 		MicroBit.DeviceInformation.kFirmwareRevisionString
 	],
 	[
@@ -821,6 +829,7 @@ function handleWindowOpened() {
 	gConnectButton.addClickEventListener(onClickConnectButton);
 	gDisconnectButton.addClickEventListener(onClickDisconnectButton);
 	gClearLedMatrixButton.addClickEventListener(onClickClearLedMatrixButton);
+	gRefreshLedMatrixButton.addClickEventListener(onClickRefreshLedMatrixButton);
 	gShowLedMessageButton.addClickEventListener(onClickShowLedMessageButton);
 	gSendUartRequestButton.addClickEventListener(onClickSendUartRequestButton);
 	gStartTestScenarioButton.addClickEventListener(onClickStartTestScenarioButton);
@@ -1125,6 +1134,13 @@ function showLedMatrix(data) {
 */
 function onClickClearLedMatrixButton() {
 	showLedMatrix(sLedMatrixBlank);
+}
+
+/**
+	On Refresh Led Matrix Button
+*/
+function onClickRefreshLedMatrixButton() {
+	retrieveLedMatrix();
 }
 
 /**
