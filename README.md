@@ -12,43 +12,33 @@
 ### Device Side
 
 <table>
-<tr>
-<td align="center">
-	Your code written in Blocks/JavaScript <br>
-	using Microsoft Makecode
-	</td>
-	</tr>
-<tr>
-<td align="center">
-	micro:bit runtime
-	</td>
-	</tr>
-<tr>
-<td align="center">
-	micro:bit device
-	</td>
-	</tr>
+	<tr><td align="center">
+Your code written in Blocks/JavaScript
+	<br>
+using Microsoft Makecode
+	</td></tr>
+	<tr><td align="center">
+micro:bit runtime
+	</td></tr>
+	<tr><td align="center">
+micro:bit device
+	</td></tr>
 	</table>
 
 ### Browser Side
 
 <table>
-<tr>
-<td align="center">
-	Your code written in JavaScript
-	</td>
-	</tr>
-<tr>
-<td align="center">
-	Web Bluetooth API
-	</td>
-	</tr>
-<tr>
-<td align="center">
-	Chrome (>= 56) or <br>
-	Opera (>= 43)
-	</td>
-	</tr>
+	<tr><td align="center">
+Your code written in JavaScript
+	</td></tr>
+	<tr><td align="center">
+Web Bluetooth API
+	</td></tr>
+	<tr><td align="center">
+Chrome (>= 56) or
+	<br>
+Opera (>= 43)
+	</td></tr>
 	</table>
 
 ## Preparation
