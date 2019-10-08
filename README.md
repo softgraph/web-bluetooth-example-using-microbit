@@ -116,3 +116,5 @@ $ open jsdoc/index.html
 ### JavaScript
 
 + [JavaScript Tutorial (w3schools.com)](https://www.w3schools.com/js/)
+
+© 2019 Softgraph, Inc.
