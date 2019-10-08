@@ -93,6 +93,7 @@ Opera (>= 43)
 ### Documentation
 
 To generate the documentation of JavaScript part, run [JSDoc (github.com)](https://github.com/jsdoc/jsdoc) as below with `jsdoc.json` file in the project root. JSDoc 3 or higher is required.
+
 ```Console
 $ jsdoc -c jsdoc.json
 $ open jsdoc/index.html

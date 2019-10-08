@@ -12,43 +12,33 @@
 ### デバイス側
 
 <table>
-<tr>
-<td align="center">
-	Microsoft Makecode を使って <br>
-	Blocks/JavaScript で書かれたコード
-	</td>
-	</tr>
-<tr>
-<td align="center">
-	micro:bit runtime
-	</td>
-	</tr>
-<tr>
-<td align="center">
-	micro:bit device
-	</td>
-	</tr>
+	<tr><td align="center">
+Microsoft Makecode を使って
+	<br>
+Blocks/JavaScript で書かれたコード
+	</td></tr>
+	<tr><td align="center">
+micro:bit runtime
+	</td></tr>
+	<tr><td align="center">
+micro:bit device
+	</td></tr>
 	</table>
 
 ### ブラウザ側
 
 <table>
-<tr>
-<td align="center">
-	JavaScript で書かれたコード
-	</td>
-	</tr>
-<tr>
-<td align="center">
-	Web Bluetooth API
-	</td>
-	</tr>
-<tr>
-<td align="center">
-	Chrome (>= 56) or <br>
-	Opera (>= 43)
-	</td>
-	</tr>
+	<tr><td align="center">
+JavaScript で書かれたコード
+	</td></tr>
+	<tr><td align="center">
+Web Bluetooth API
+	</td></tr>
+	<tr><td align="center">
+Chrome (>= 56) or
+	<br>
+Opera (>= 43)
+	</td></tr>
 	</table>
 
 ## 準備
@@ -103,6 +93,7 @@
 ### ドキュメント
 
 JavaScript 部分のドキュメントを生成するには、プロジェクトルートの `jsdoc.json` を使って次のように [JSDoc (github.com)](https://github.com/jsdoc/jsdoc) を実行してください。JSDoc 3 以上が必要です。
+
 ```Console
 $ jsdoc -c jsdoc.json
 $ open jsdoc/index.html
