@@ -1,107 +1,100 @@
-	<!DOCTYPE html>
+<!DOCTYPE html>
+<html>
 
-	<html><head>
-
+<head>
 	<meta charset="utf-8">
 	<link rel="stylesheet" type="text/css" href="theme.css">
+	<title> Controllrig micro:bit device via Web Bluetooth API </title>
+</head>
 
-	<title>
-Controllrig micro:bit device via Web Bluetooth API
-	</title>
-
-	</head><body>
-
-	<h2>
-Controllrig micro:bit device via Web Bluetooth API
-	</h2>
-
-	<button type="button" id="id_button_connect">
-Connect
-	</button>
-	<button type="button" id="id_button_disconnect">
-Disconnect
-	</button>
-
+<body>
+	<h2> Controllrig micro:bit device via Web Bluetooth API </h2>
+	<button type="button" id="id_button_connect"> Connect </button>
+	<button type="button" id="id_button_disconnect"> Disconnect </button>
 	<table>
-
-	<tr><td><div>
-Connection Status:
-	</div></td><td>
-	<input id="id_input_text_connection_status" type="text" size="40" readonly>
-	</td></tr>
-
-	<tr><td><div>
-Model Number:
-	</div></td><td>
-	<input id="id_input_text_model_number" type="text" size="40" readonly>
-	</td></tr>
-
-	<tr><td><div>
-Firmware Revision:
-	</div></td><td>
-	<input id="id_input_text_firmware_revision" type="text" size="40" readonly>
-	</td></tr>
-
-	<tr><td><div>
-Button Status:
-	</div></td><td>
-	<input id="id_input_text_button_status" type="text" size="40" readonly>
-	</td></tr>
-
-	<tr><td><div>
-LED Matrix:
-	</div></td><td>
-	<textarea id="id_textarea_led_matrix" rows="6" cols="39"></textarea>
-	</td><td>
-	<button type="button" id="id_button_clear_led_matrix">
-Clear
-	</button>
-	<br>
-	<br>
-	<button type="button" id="id_button_refresh_led_matrix">
-Refresh
-	</button>
-	</td></tr>
-
-	<tr><td><div>
-LED Message:
-	</div></td><td>
-	<input id="id_input_text_led_message" type="text" size="40" value="WoW">
-	</td><td>
-	<button type="button" id="id_button_show_led_message">
-Show
-	</button>
-	</td></tr>
-
-	<tr><td><div>
-UART Request:
-	</div></td><td>
-	<input id="id_input_text_uart_request" type="text" size="40" value="HELLO">
-	</td><td>
-	<button type="button" id="id_button_send_uart_request">
-Send
-	</button>
-	</td></tr>
-
-	<tr><td><div>
-UART Response:
-	</div></td><td>
-	<input id="id_input_text_uart_response" type="text" size="40" readonly>
-	</td></tr>
-
+		<tr>
+			<td>
+				<div> Connection Status: </div>
+			</td>
+			<td>
+				<input id="id_input_text_connection_status" type="text" size="40" readonly>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<div> Model Number: </div>
+			</td>
+			<td>
+				<input id="id_input_text_model_number" type="text" size="40" readonly>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<div> Firmware Revision: </div>
+			</td>
+			<td>
+				<input id="id_input_text_firmware_revision" type="text" size="40" readonly>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<div> Button Status: </div>
+			</td>
+			<td>
+				<input id="id_input_text_button_status" type="text" size="40" readonly>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<div> LED Matrix: </div>
+			</td>
+			<td>
+				<textarea id="id_textarea_led_matrix" rows="6" cols="39"></textarea>
+			</td>
+			<td>
+				<button type="button" id="id_button_clear_led_matrix"> Clear </button>
+				<br>
+				<br>
+				<button type="button" id="id_button_refresh_led_matrix"> Refresh </button>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<div> LED Message: </div>
+			</td>
+			<td>
+				<input id="id_input_text_led_message" type="text" size="40" value="WoW">
+			</td>
+			<td>
+				<button type="button" id="id_button_show_led_message"> Show </button>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<div> UART Request: </div>
+			</td>
+			<td>
+				<input id="id_input_text_uart_request" type="text" size="40" value="HELLO">
+			</td>
+			<td>
+				<button type="button" id="id_button_send_uart_request"> Send </button>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<div> UART Response: </div>
+			</td>
+			<td>
+				<input id="id_input_text_uart_response" type="text" size="40" readonly>
+			</td>
+		</tr>
 	</table>
-
 	<hr>
-
-	<button type="button" id="id_button_start_test_scenario">
-Start Test Scenario
-	</button>
-	<button type="button" id="id_button_cancel_test_scenario">
-CancelTest Scenario
-	</button>
+	<button type="button" id="id_button_start_test_scenario"> Start Test Scenario </button>
+	<button type="button" id="id_button_cancel_test_scenario"> CancelTest Scenario </button>
 	<br>
 	<input id="id_input_text_test_step" type="text" size="60" readonly>
-
 	<script src="main.js"></script>
+</body>
 
-	</body></html>
+</html>
