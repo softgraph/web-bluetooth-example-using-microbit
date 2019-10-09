@@ -312,11 +312,11 @@ class TextArea {
 	*/
 	constructor(id) {
 		/**	@member	{String} - the id of the element
-		*/
+		 */
 		this._id = id;
 
 		/**	@member	{Element} - the target `Element` (`HTMLInputElement` or HTMLTextAreaElement`)
-		*/
+		 */
 		this._target = null;
 	}
 
@@ -349,11 +349,11 @@ class Button {
 	*/
 	constructor(id) {
 		/**	@member	{String} - the id of the element
-		*/
+		 */
 		this._id = id;
 
 		/**	@member	{Element} - the target `Element` (`HTMLButtonElement`)
-		*/
+		 */
 		this._target = null;
 	}
 
@@ -385,23 +385,23 @@ class BtgServer {
 	*/
 	constructor(device, server, serviceUuidList) {
 		/**	@member	{BluetoothDevice} - the connected Bluetooth device
-		*/
+		 */
 		this._device = device;
 
 		/**	@member	{BluetoothRemoteGATTServer} - the target Bluetooth Remote GATT Server of the device
-		*/
+		 */
 		this._target = server;
 
 		/**	@member	{Array(UUID)} - the list of service UUID of the server
-		*/
+		 */
 		this._uuidList = serviceUuidList;
 
 		/**	@member	{Map(UUID, BtgService)} - the list of registered service of the server
-		*/
+		 */
 		this._services = new Map();
 
 		/**	@member	{Map(UUID, BtgCharacteristic)} - the list of registered characteristic of the server
-		*/
+		 */
 		this._characteristics = new Map();
 	}
 
@@ -483,15 +483,15 @@ class BtgService {
 	*/
 	constructor(server, service, characteristicUuidList) {
 		/**	@member	{BtgServer} - the connected Bluetooth GATT Server
-		*/
+		 */
 		this._server = server;
 
 		/**	@member	{BluetoothRemoteGATTService} - the target Bluetooth Remote GATT Service
-		*/
+		 */
 		this._target = service;
 
 		/**	@member	{Array(UUID)} - the list of characteristic UUID for the service
-		*/
+		 */
 		this._uuidList = characteristicUuidList;
 
 		this.init();
@@ -536,11 +536,11 @@ class BtgCharacteristic {
 	*/
 	constructor(server, characteristic) {
 		/**	@member	{BtgServer} - the connected Bluetooth GATT Server
-		*/
+		 */
 		this._server = server;
 
 		/**	@member	{BluetoothRemoteGATTCharacteristic} - the target Bluetooth Remote GATT Characteristic of the server
-		*/
+		 */
 		this._target = characteristic;
 
 		this.init();
@@ -766,7 +766,7 @@ const sBtDeviceFilter = {
 	/**
 		Device name prefix
 	*/
-	namePrefix: 'BBC micro:bit'	// e.g., 'BBC micro:bit [vagip]'
+	namePrefix: 'BBC micro:bit' // e.g., 'BBC micro:bit [vagip]'
 };
 
 /**
@@ -882,12 +882,10 @@ function onClickConnectButton() {
 	}
 
 	gConnectionStatusTextArea.text = 'Connecting...';
-	navigator.bluetooth.requestDevice(
-		{
-			filters: [sBtDeviceFilter],
-			optionalServices: sBtgServiceUuidList
-		}
-	).then(
+	navigator.bluetooth.requestDevice({
+		filters: [sBtDeviceFilter],
+		optionalServices: sBtgServiceUuidList
+	}).then(
 		// BluetoothDevice
 		device => {
 			gBtDevice = device;
@@ -914,7 +912,7 @@ function onClickConnectButton() {
 		}
 	).catch(
 		error => {
-			gConnectionStatusTextArea.text = 'Connection Failed';	// this update is suspended while the modal alert below is active
+			gConnectionStatusTextArea.text = 'Connection Failed'; // this update is suspended while the modal alert below is active
 			alert(error);
 		}
 	);
@@ -1015,11 +1013,11 @@ function observeButtons() {
 	@var	{TypedArray}
 */
 const sLedMatrixBlank = Uint8Array.of(
-	0x00,	//	- - - - -
-	0x00,	//	- - - - -
-	0x00,	//	- - - - -
-	0x00,	//	- - - - -
-	0x00	//	- - - - -
+	0x00, //  - - - - -
+	0x00, //  - - - - -
+	0x00, //  - - - - -
+	0x00, //  - - - - -
+	0x00 //   - - - - -
 );
 
 /**
@@ -1027,11 +1025,11 @@ const sLedMatrixBlank = Uint8Array.of(
 	@var	{TypedArray}
 */
 const sLedMatrixCheckMark = Uint8Array.of(
-	0x00,	//	- - - - -
-	0x01,	//	- - - - X
-	0x02,	//	- - - X -
-	0x14,	//	X - X - -
-	0x08	//	- X - - -
+	0x00, //  - - - - -
+	0x01, //  - - - - X
+	0x02, //  - - - X -
+	0x14, //  X - X - -
+	0x08 //   - X - - -
 );
 
 /**
@@ -1219,8 +1217,7 @@ function onClickSendUartRequestButton() {
 /**
 	Test Scenario
 */
-const sTestScenario = [
-	{
+const sTestScenario = [{
 		condition: () => true,
 		guide: 'Press Connect button and choose a micro:bit to connect.'
 	},
