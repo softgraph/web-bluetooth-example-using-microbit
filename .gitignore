@@ -2,8 +2,7 @@
 
 .DS_Store
 
-/_/
-/jsdoc/
 /.brackets.json
 /.eslintrc.json
-/.markdownlint.json
+/_/
+/jsdoc/
