@@ -115,6 +115,7 @@ $ open jsdoc/index.html
 
 ### JavaScript
 
++ [JavaScript (mozilla.org)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 + [JavaScript Tutorial (w3schools.com)](https://www.w3schools.com/js/)
 
 © 2019 Softgraph, Inc.
